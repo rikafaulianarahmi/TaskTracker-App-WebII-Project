@@ -72,7 +72,7 @@ Additionally, make sure that the following extensions are enabled in your PHP:
 Project UAS Mata Kuliah Pemrograman Web II
 
 ## About
-Lorem Ipsum Dolor Sit Amet (About the Projects)
+Project/Task Tracker App
 
 ### Team
 - Frontend: Rika Fauliana Rahmi [2410817120017]<br>
