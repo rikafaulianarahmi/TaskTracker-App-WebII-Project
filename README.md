@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # CodeIgniter 4 Application Starter
 
 ## What is CodeIgniter?
@@ -68,16 +67,14 @@ Additionally, make sure that the following extensions are enabled in your PHP:
 - json (enabled by default - don't turn it off)
 - [mysqlnd](http://php.net/manual/en/mysqlnd.install.php) if you plan to use MySQL
 - [libcurl](http://php.net/manual/en/curl.requirements.php) if you plan to use the HTTP\CURLRequest library
-=======
+
 # TaskTracker-App-WebII-Project
 Project UAS Mata Kuliah Pemrograman Web II
 
 ## About
 Lorem Ipsum Dolor Sit Amet (About the Projects)
 
-
 ### Team
 - Frontend: Rika Fauliana Rahmi [2410817120017]<br>
 - Backend : Sebastian Abe Santoso [2410817210002]<br>
 - Database: Arya Arrozza Ridho Syaputra [2410817210010]<br>
->>>>>>> 0bfcbd997ae12bd277a96fff1a5d8b300b0f670c
