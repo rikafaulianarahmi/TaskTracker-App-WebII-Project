@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # CodeIgniter 4 Application Starter
 
 ## What is CodeIgniter?
@@ -80,4 +79,3 @@ Lorem Ipsum Dolor Sit Amet (About the Projects)
 - Frontend: Rika Fauliana Rahmi [2410817120017]<br>
 - Backend : Sebastian Abe Santoso [2410817210002]<br>
 - Database: Arya Arrozza Ridho Syaputra [2410817210010]<br>
->>>>>>> 0bfcbd997ae12bd277a96fff1a5d8b300b0f670c
