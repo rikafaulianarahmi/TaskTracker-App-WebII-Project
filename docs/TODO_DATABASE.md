@@ -5,6 +5,8 @@
 * [x] Database Connection Setup
 * [x] Database Schema Verification
 * [x] Initial Database Configuration
+* [x] Document database schema (ER diagram)
+* [X] Document table relationships
 
 #### 🚧 In Progress
 
@@ -69,7 +71,5 @@
 
 ##### Documentation
 
-* [ ] Document database schema (ER diagram)
-* [ ] Document table relationships
 * [ ] Document migration procedures
 * [ ] Create database setup guide
