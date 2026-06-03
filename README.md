@@ -78,3 +78,7 @@ Project/Task Tracker App
 - Frontend: Rika Fauliana Rahmi [2410817120017]<br>
 - Backend : Sebastian Abe Santoso [2410817210002]<br>
 - Database: Arya Arrozza Ridho Syaputra [2410817210010]<br>
+
+## Project Documentation
+
+- [Documentation](./docs/) - Project documentation and TODO lists
