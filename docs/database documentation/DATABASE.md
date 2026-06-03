@@ -2,6 +2,8 @@
 
 ---
 
+![ERD](erd.png)
+
 ## 1. `users` → `projects`
 
 **One-to-Many** via `projects.admin_id`
