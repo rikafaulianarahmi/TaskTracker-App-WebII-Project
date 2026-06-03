@@ -11,20 +11,24 @@
 * [x] Session Authentication
 * [x] Basic Route Configuration
 * [x] Dummy Admin User Created
+* [x] Authentication Filter (Middleware)
+* [x] Project Controller
+* [x] Project Detail Page Logic
+* [x] Authentication Testing
+* [x] Basic Route Protection
 
 #### 🚧 In Progress
 
-* [ ] Authentication Filter (Middleware)
-* [ ] Route Protection & Access Control
+* [ ] Project Create Feature
+* [ ] Project Store Logic
+* [ ] Project Form Validation
 
 #### ❌ Not Started
 
 ##### Project Module
 
-* [ ] Project Controller
 * [ ] Project CRUD
 * [ ] Project Archive Feature
-* [ ] Project Detail Page Logic
 
 ##### Project Member Module
 
@@ -57,7 +61,6 @@
 
 ##### Testing
 
-* [ ] Authentication Testing
 * [ ] Project Flow Testing
 * [ ] Task Flow Testing
 * [ ] Permission Testing
@@ -65,3 +68,4 @@
 ##### Auth
 * [ ] Login Validation Messages
 * [ ] Redirect Logged-in User Away from Login Page
+* [ ] Role-Based Access Control
