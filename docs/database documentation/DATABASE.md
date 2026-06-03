@@ -1,8 +1,9 @@
+![ERD](erd.png)
+
 # Relasi Antar Tabel — ERD Manajemen Proyek Tim Kecil
 
 ---
 
-![ERD](erd.png)
 
 ## 1. `users` → `projects`
 
