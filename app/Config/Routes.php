@@ -12,8 +12,8 @@ $routes->get('/dashboard', 'DashboardController::index', ['filter' => 'auth']);
 
 $routes->get('/projects/create', 'ProjectController::create', ['filter' => 'auth']);
 $routes->post('/projects/store', 'ProjectController::store', ['filter' => 'auth']);
-
 $routes->get('/projects', 'ProjectController::index', ['filter' => 'auth']);
-$routes->post('/projects/(:num)/archive', 'ProjectController::archive/$1', ['filter' => 'auth']);
 
+$routes->post('/projects/(:num)/archive', 'ProjectController::archive/$1', ['filter' => 'auth']);
+$routes->post('/projects/(:num)/members', 'ProjectMemberController::store/$1', ['filter' => 'auth']);
 $routes->get('/projects/(:num)', 'ProjectController::show/$1', ['filter' => 'auth']);

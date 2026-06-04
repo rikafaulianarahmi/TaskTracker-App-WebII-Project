@@ -20,9 +20,13 @@
 * [x] Project Store Logic
 * [x] Project Form Validation
 * [x] Project Archive Feature
+* [x] Add Member to Project
+* [x] Basic Project Member Validation
+* [x] Prevent Duplicate Project Members
 
 #### 🚧 In Progress
 
+* [ ] Remove Member from Project
 
 #### ❌ Not Started
 
@@ -32,8 +36,6 @@
 
 ##### Project Member Module
 
-* [ ] Add Member to Project
-* [ ] Remove Member from Project
 * [ ] Project Role Authorization
 
 ##### Task Module

@@ -4,6 +4,8 @@ namespace App\Controllers;
 
 use App\Models\ProjectModel;
 use CodeIgniter\Exceptions\PageNotFoundException;
+use App\Models\ProjectMemberModel;
+use App\Models\UserModel;
 
 class ProjectController extends BaseController
 {
@@ -32,8 +34,23 @@ class ProjectController extends BaseController
             throw PageNotFoundException::forPageNotFound('Project not found');
         }
 
+        $memberModel = new ProjectMemberModel();
+        $userModel = new UserModel();
+
+        $members = $memberModel
+            ->select('project_members.*, users.name, users.email, users.role as user_role')
+            ->join('users', 'users.id = project_members.user_id')
+            ->where('project_members.project_id', $id)
+            ->findAll();
+
+        $users = $userModel
+            ->where('id !=', $project['admin_id'])
+            ->findAll();
+
         return view('projects/show', [
-            'project' => $project
+            'project' => $project,
+            'members' => $members,
+            'users' => $users,
         ]);
     }
 

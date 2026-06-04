@@ -3,6 +3,62 @@
 <p><?= esc($project['description']) ?></p>
 <p>Status: <?= esc($project['status']) ?></p>
 
+<hr>
+
+<h2>Project Members</h2>
+
+<?php if (session()->getFlashdata('success')): ?>
+    <p><?= esc(session()->getFlashdata('success')) ?></p>
+<?php endif; ?>
+
+<?php if (session()->getFlashdata('error')): ?>
+    <p><?= esc(session()->getFlashdata('error')) ?></p>
+<?php endif; ?>
+
+<?php if (session()->getFlashdata('errors')): ?>
+    <ul>
+        <?php foreach (session()->getFlashdata('errors') as $error): ?>
+            <li><?= esc($error) ?></li>
+        <?php endforeach; ?>
+    </ul>
+<?php endif; ?>
+
+<?php if (empty($members)): ?>
+    <p>No members yet.</p>
+<?php else: ?>
+    <ul>
+        <?php foreach ($members as $member): ?>
+            <li>
+                <?= esc($member['name']) ?>
+                (<?= esc($member['email']) ?>)
+                - Project Role: <?= esc($member['role']) ?>
+            </li>
+        <?php endforeach; ?>
+    </ul>
+<?php endif; ?>
+
+<h3>Add Member</h3>
+
+<form action="/projects/<?= esc($project['id']) ?>/members" method="post">
+    <?= csrf_field() ?>
+
+    <select name="user_id">
+        <option value="">-- Select User --</option>
+        <?php foreach ($users as $user): ?>
+            <option value="<?= esc($user['id']) ?>">
+                <?= esc($user['name']) ?> - <?= esc($user['email']) ?>
+            </option>
+        <?php endforeach; ?>
+    </select>
+
+    <select name="role">
+        <option value="member">Member</option>
+        <option value="klien">Klien</option>
+    </select>
+
+    <button type="submit">Add Member</button>
+</form>
+
 <form action="/projects/<?= esc($project['id']) ?>/archive" method="post" onsubmit="return confirm('Archive this project?')">
     <?= csrf_field() ?>
     <button type="submit">Archive Project</button>

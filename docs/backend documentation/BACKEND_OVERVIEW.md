@@ -64,6 +64,9 @@ Fungsi:
 
 * Menampilkan daftar project yang belum diarsipkan
 * Menampilkan detail satu project berdasarkan id
+* Hanya menampilkan detail project yang belum diarsipkan
+* Mengambil daftar member project
+* Mengambil data user yang dapat ditambahkan sebagai member project
 * Menampilkan form tambah project
 * Menyimpan data project baru
 * Melakukan validasi input saat membuat project
@@ -100,6 +103,23 @@ Fungsi model:
 * Menentukan kolom yang boleh diisi
 * Mempermudah query database lewat CI4 Model
 
+### ProjectMemberController
+
+Fungsi:
+
+* Menambahkan user sebagai member project
+* Melakukan validasi input user dan role member
+* Memastikan project yang dituju tersedia
+* Mencegah user yang sama ditambahkan dua kali ke project yang sama
+* Menyimpan role member sebagai `member` atau `klien`
+* Menyimpan waktu bergabung member melalui `joined_at`
+
+Method:
+
+```text
+store($projectId)
+'''
+
 ## Filter yang sudah dibuat
 
 ### AuthFilter
@@ -115,7 +135,11 @@ Route yang sudah memakai AuthFilter:
 ```text
 /logout
 /dashboard
+/projects/create
+/projects/store
 /projects
+/projects/{id}/archive
+/projects/{id}/members
 /projects/{id}
 ```
 
@@ -149,6 +173,7 @@ Menampilkan daftar project
 Menampilkan detail project
 Membuat project
 Koneksi database melalui model
+Menambah member ke project
 ```
 
 ## Catatan sementara
