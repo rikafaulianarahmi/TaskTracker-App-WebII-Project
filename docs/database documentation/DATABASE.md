@@ -95,3 +95,9 @@ Satu proyek dapat memiliki banyak entri log aktivitas. Kolom ini nullable — lo
 | `users` → `comments` | One-to-Many | `comments.user_id` |
 | `users` → `activity_logs` | One-to-Many | `activity_logs.user_id` |
 | `projects` → `activity_logs` | One-to-Many | `activity_logs.project_id` (nullable) |
+
+---
+
+[SQL Verify DB Script](verify_database.sql)
+Verifikasi Database <br>
+`Get-Content verify_database.sql | mysql -u root -p tasktracker`
