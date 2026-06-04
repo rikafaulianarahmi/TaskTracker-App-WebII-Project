@@ -100,4 +100,4 @@ Satu proyek dapat memiliki banyak entri log aktivitas. Kolom ini nullable — lo
 
 [SQL Verify DB Script](verify_database.sql)
 Verifikasi Database <br>
-`Get-Content verify_database.sql | mysql -u root -p tasktracker`
+Run `Get-Content verify_database.sql | mysql -u root -p tasktracker` di `docs\database documentation`
