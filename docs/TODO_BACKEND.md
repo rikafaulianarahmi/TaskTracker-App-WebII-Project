@@ -19,6 +19,7 @@
 * [x] Project Create Feature
 * [x] Project Store Logic
 * [x] Project Form Validation
+* [x] Project Archive Feature
 
 #### 🚧 In Progress
 
@@ -28,7 +29,6 @@
 ##### Project Module
 
 * [ ] Project CRUD
-* [ ] Project Archive Feature
 
 ##### Project Member Module
 

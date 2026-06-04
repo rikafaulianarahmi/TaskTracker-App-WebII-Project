@@ -69,4 +69,23 @@ class ProjectController extends BaseController
             ->to('/projects')
             ->with('success', 'Project berhasil dibuat.');
     }
+
+    public function archive($id)
+    {
+    $projectModel = new \App\Models\ProjectModel();
+
+    $project = $projectModel->find($id);
+
+    if (! $project) {
+        throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound('Project not found');
+    }
+
+    $projectModel->update($id, [
+        'archived_at' => date('Y-m-d H:i:s'),
+    ]);
+
+    return redirect()
+        ->to('/projects')
+        ->with('success', 'Project berhasil diarsipkan.');
+    }
 }

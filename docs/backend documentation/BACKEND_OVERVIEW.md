@@ -69,6 +69,8 @@ Fungsi:
 * Melakukan validasi input saat membuat project
 * Menampilkan error jika validasi gagal
 * Menampilkan halaman 404 jika project tidak ditemukan
+* Mengarsipkan project dengan mengisi nilai `archived_at`
+* Setelah project diarsipkan, user diarahkan kembali ke halaman daftar project
 
 Method:
 
@@ -77,7 +79,8 @@ index()
 show($id)
 create()
 store()
-```
+archive($id)
+'''
 
 ## Model yang sudah dibuat
 
@@ -116,13 +119,14 @@ Route yang sudah memakai AuthFilter:
 /projects/{id}
 ```
 
-## View yang sudah dibuat
+## View yang sudah dibuat   
 
 ```text
 auth/login.php
 dashboard/index.php
 projects/index.php
 projects/show.php
+projects/create.php
 ```
 
 Fungsi view:
@@ -131,6 +135,7 @@ Fungsi view:
 * dashboard/index.php untuk halaman dashboard
 * projects/index.php untuk daftar project
 * projects/show.php untuk detail project
+* projects/show.php untuk membuat project
 
 ## Fitur yang sudah berjalan
 
@@ -142,6 +147,7 @@ Protected route
 Dashboard setelah login
 Menampilkan daftar project
 Menampilkan detail project
+Membuat project
 Koneksi database melalui model
 ```
 
