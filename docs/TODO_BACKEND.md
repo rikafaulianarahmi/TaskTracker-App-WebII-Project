@@ -23,20 +23,14 @@
 * [x] Add Member to Project
 * [x] Basic Project Member Validation
 * [x] Prevent Duplicate Project Members
+* [x] Remove Member from Project
 
 #### 🚧 In Progress
 
-* [ ] Remove Member from Project
-
-#### ❌ Not Started
-
-##### Project Module
-
+* [ ] Project Role Authorization
 * [ ] Project CRUD
 
-##### Project Member Module
-
-* [ ] Project Role Authorization
+#### ❌ Not Started
 
 ##### Task Module
 

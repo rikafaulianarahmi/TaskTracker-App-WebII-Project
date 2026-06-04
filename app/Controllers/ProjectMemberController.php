@@ -54,4 +54,26 @@ class ProjectMemberController extends BaseController
             ->to('/projects/' . $projectId)
             ->with('success', 'Member berhasil ditambahkan.');
     }
+
+    public function remove($projectId, $memberId)
+    {
+    $memberModel = new \App\Models\ProjectMemberModel();
+
+    $member = $memberModel
+        ->where('project_id', $projectId)
+        ->where('id', $memberId)
+        ->first();
+
+    if (! $member) {
+        return redirect()
+            ->to('/projects/' . $projectId)
+            ->with('error', 'Member tidak ditemukan.');
+    }
+
+    $memberModel->delete($memberId);
+
+    return redirect()
+        ->to('/projects/' . $projectId)
+        ->with('success', 'Member berhasil dihapus dari project.');
+    }
 }

@@ -32,6 +32,15 @@
                 <?= esc($member['name']) ?>
                 (<?= esc($member['email']) ?>)
                 - Project Role: <?= esc($member['role']) ?>
+
+                <form 
+                    action="/projects/<?= esc($project['id']) ?>/members/<?= esc($member['id']) ?>/remove" 
+                    method="post"
+                    onsubmit="return confirm('Remove this member from project?')"
+                >
+                    <?= csrf_field() ?>
+                    <button type="submit">Remove</button>
+                </form>
             </li>
         <?php endforeach; ?>
     </ul>

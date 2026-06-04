@@ -113,11 +113,14 @@ Fungsi:
 * Mencegah user yang sama ditambahkan dua kali ke project yang sama
 * Menyimpan role member sebagai `member` atau `klien`
 * Menyimpan waktu bergabung member melalui `joined_at`
+* Menghapus member dari project
+* Menampilkan konfirmasi sebelum member dihapus
 
 Method:
 
 ```text
 store($projectId)
+remove($projectId, $memberId)
 '''
 
 ## Filter yang sudah dibuat
@@ -140,6 +143,7 @@ Route yang sudah memakai AuthFilter:
 /projects
 /projects/{id}/archive
 /projects/{id}/members
+/projects/{projectId}/members/{memberId}/remove
 /projects/{id}
 ```
 
@@ -174,6 +178,7 @@ Menampilkan detail project
 Membuat project
 Koneksi database melalui model
 Menambah member ke project
+Delete member dari project
 ```
 
 ## Catatan sementara
