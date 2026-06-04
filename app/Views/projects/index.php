@@ -2,6 +2,7 @@
 
 <a href="/dashboard">Back to Dashboard</a>
 
+<a href="/projects/create">Create New Project</a>
 <?php if (empty($projects)): ?>
     <p>No projects yet.</p>
 <?php endif; ?>

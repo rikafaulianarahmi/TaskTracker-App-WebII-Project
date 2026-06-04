@@ -16,12 +16,12 @@
 * [x] Project Detail Page Logic
 * [x] Authentication Testing
 * [x] Basic Route Protection
+* [x] Project Create Feature
+* [x] Project Store Logic
+* [x] Project Form Validation
 
 #### 🚧 In Progress
 
-* [ ] Project Create Feature
-* [ ] Project Store Logic
-* [ ] Project Form Validation
 
 #### ❌ Not Started
 

@@ -36,4 +36,37 @@ class ProjectController extends BaseController
             'project' => $project
         ]);
     }
+
+    public function create()
+    {
+        return view('projects/create');
+    }
+
+    public function store()
+    {
+        $rules = [
+            'title' => 'required|min_length[3]|max_length[200]',
+            'description' => 'permit_empty|max_length[1000]',
+        ];
+
+        if (! $this->validate($rules)) {
+            return redirect()
+                ->back()
+                ->withInput()
+                ->with('errors', $this->validator->getErrors());
+        }
+
+        $projectModel = new ProjectModel();
+
+        $projectModel->insert([
+            'title' => $this->request->getPost('title'),
+            'description' => $this->request->getPost('description'),
+            'admin_id' => session()->get('user_id'),
+            'status' => 'active',
+        ]);
+
+        return redirect()
+            ->to('/projects')
+            ->with('success', 'Project berhasil dibuat.');
+    }
 }

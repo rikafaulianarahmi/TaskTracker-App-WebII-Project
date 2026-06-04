@@ -10,8 +10,20 @@ $routes->get('/logout', 'AuthController::logout', ['filter' => 'auth']);
 $routes->get('/dashboard', 'DashboardController::index', ['filter' => 'auth']);
 
 $routes->get('/projects', 'ProjectController::index', ['filter' => 'auth']);
+$routes->get('/projects/create', 'ProjectController::create', ['filter' => 'auth']); 
+
+$routes->post('/projects/store', 'ProjectController::store', ['filter' => 'auth']);
 $routes->get('/projects/(:num)', 'ProjectController::show/$1', ['filter' => 'auth']);
 ```
+
+* Route `/` digunakan untuk menampilkan halaman login.
+* Route `/login` digunakan untuk memproses percobaan login.
+* Route `/logout` digunakan untuk keluar dari akun.
+* Route `/dashboard` digunakan untuk menampilkan halaman dashboard.
+* Route `/projects` digunakan untuk menampilkan daftar project.
+* Route `/projects/create` digunakan untuk menampilkan form tambah project.
+* Route `/projects/store` digunakan untuk menyimpan data project baru.
+* Route `/projects/(:num)` digunakan untuk menampilkan detail project berdasarkan ID.
 
 ## Controller yang sudah dibuat
 
@@ -50,15 +62,21 @@ index()
 
 Fungsi:
 
-* Menampilkan daftar project
+* Menampilkan daftar project yang belum diarsipkan
 * Menampilkan detail satu project berdasarkan id
-* Hanya menampilkan project yang belum diarsipkan
+* Menampilkan form tambah project
+* Menyimpan data project baru
+* Melakukan validasi input saat membuat project
+* Menampilkan error jika validasi gagal
+* Menampilkan halaman 404 jika project tidak ditemukan
 
 Method:
 
 ```text
 index()
 show($id)
+create()
+store()
 ```
 
 ## Model yang sudah dibuat
