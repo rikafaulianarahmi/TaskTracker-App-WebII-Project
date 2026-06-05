@@ -183,10 +183,24 @@ Delete member dari project
 
 ## Catatan sementara
 
-Akun dummy:
+Akun dummy (Admin):
 
 ```text
-Email: admin@test.com
+Email: admin@example.com
+Password: password
+```
+
+Akun dummy (member):
+
+```text
+Email: budi@example.com
+Password: password
+```
+
+Akun dummy (klien):
+
+```text
+Email: klien@example.com
 Password: password
 ```
 
