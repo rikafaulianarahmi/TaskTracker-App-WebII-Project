@@ -33,45 +33,51 @@
                 (<?= esc($member['email']) ?>)
                 - Project Role: <?= esc($member['role']) ?>
 
-                <form 
-                    action="/projects/<?= esc($project['id']) ?>/members/<?= esc($member['id']) ?>/remove" 
-                    method="post"
-                    onsubmit="return confirm('Remove this member from project?')"
-                >
-                    <?= csrf_field() ?>
-                    <button type="submit">Remove</button>
-                </form>
+                <?php if ($canManage): ?>
+                    <form 
+                        action="/projects/<?= esc($project['id']) ?>/members/<?= esc($member['id']) ?>/remove" 
+                        method="post"
+                        onsubmit="return confirm('Remove this member from project?')"
+                    >
+                        <?= csrf_field() ?>
+                        <button type="submit">Remove</button>
+                    </form>
+                <?php endif; ?>
             </li>
         <?php endforeach; ?>
     </ul>
 <?php endif; ?>
 
-<h3>Add Member</h3>
+<?php if ($canManage): ?>
 
-<form action="/projects/<?= esc($project['id']) ?>/members" method="post">
-    <?= csrf_field() ?>
+    <h3>Add Member</h3>
 
-    <select name="user_id">
-        <option value="">-- Select User --</option>
-        <?php foreach ($users as $user): ?>
-            <option value="<?= esc($user['id']) ?>">
-                <?= esc($user['name']) ?> - <?= esc($user['email']) ?>
-            </option>
-        <?php endforeach; ?>
-    </select>
+    <form action="/projects/<?= esc($project['id']) ?>/members" method="post">
+        <?= csrf_field() ?>
 
-    <select name="role">
-        <option value="member">Member</option>
-        <option value="klien">Klien</option>
-    </select>
+        <select name="user_id">
+            <option value="">-- Select User --</option>
+            <?php foreach ($users as $user): ?>
+                <option value="<?= esc($user['id']) ?>">
+                    <?= esc($user['name']) ?> - <?= esc($user['email']) ?>
+                </option>
+            <?php endforeach; ?>
+        </select>
 
-    <button type="submit">Add Member</button>
-</form>
+        <select name="role">
+            <option value="member">Member</option>
+            <option value="klien">Klien</option>
+        </select>
 
-<form action="/projects/<?= esc($project['id']) ?>/archive" method="post" onsubmit="return confirm('Archive this project?')">
-    <?= csrf_field() ?>
-    <button type="submit">Archive Project</button>
-</form>
+        <button type="submit">Add Member</button>
+    </form>
+
+    <form action="/projects/<?= esc($project['id']) ?>/archive" method="post" onsubmit="return confirm('Archive this project?')">
+        <?= csrf_field() ?>
+        <button type="submit">Archive Project</button>
+    </form>
+
+<?php endif; ?>
 
 <br>
 

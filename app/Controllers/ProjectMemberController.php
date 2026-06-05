@@ -3,12 +3,19 @@
 namespace App\Controllers;
 
 use App\Models\ProjectMemberModel;
-use App\Models\ProjectModel;
 
 class ProjectMemberController extends BaseController
 {
     public function store($projectId)
     {
+        $access = $this->getProjectAccess($projectId);
+
+        if (! $access['is_admin']) {
+            return redirect()
+                ->to('/projects/' . $projectId)
+                ->with('error', 'Kamu tidak punya akses untuk mengelola member project ini.');
+        }
+
         $rules = [
             'user_id' => 'required|integer',
             'role' => 'required|in_list[member,klien]',
@@ -19,15 +26,6 @@ class ProjectMemberController extends BaseController
                 ->back()
                 ->withInput()
                 ->with('errors', $this->validator->getErrors());
-        }
-
-        $projectModel = new ProjectModel();
-        $project = $projectModel->find($projectId);
-
-        if (! $project) {
-            return redirect()
-                ->to('/projects')
-                ->with('error', 'Project tidak ditemukan.');
         }
 
         $memberModel = new ProjectMemberModel();
@@ -57,23 +55,31 @@ class ProjectMemberController extends BaseController
 
     public function remove($projectId, $memberId)
     {
-    $memberModel = new \App\Models\ProjectMemberModel();
+        $access = $this->getProjectAccess($projectId);
 
-    $member = $memberModel
-        ->where('project_id', $projectId)
-        ->where('id', $memberId)
-        ->first();
+        if (! $access['is_admin']) {
+            return redirect()
+                ->to('/projects/' . $projectId)
+                ->with('error', 'Kamu tidak punya akses untuk mengelola member project ini.');
+        }
 
-    if (! $member) {
+        $memberModel = new ProjectMemberModel();
+
+        $member = $memberModel
+            ->where('project_id', $projectId)
+            ->where('id', $memberId)
+            ->first();
+
+        if (! $member) {
+            return redirect()
+                ->to('/projects/' . $projectId)
+                ->with('error', 'Member tidak ditemukan.');
+        }
+
+        $memberModel->delete($memberId);
+
         return redirect()
             ->to('/projects/' . $projectId)
-            ->with('error', 'Member tidak ditemukan.');
-    }
-
-    $memberModel->delete($memberId);
-
-    return redirect()
-        ->to('/projects/' . $projectId)
-        ->with('success', 'Member berhasil dihapus dari project.');
+            ->with('success', 'Member berhasil dihapus dari project.');
     }
 }

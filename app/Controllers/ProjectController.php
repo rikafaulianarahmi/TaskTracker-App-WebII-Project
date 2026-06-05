@@ -11,29 +11,36 @@ class ProjectController extends BaseController
 {
     public function index()
     {
-        $projectModel = new ProjectModel();
+        $userId = session()->get('user_id');
 
-        $projects = $projectModel
-            ->where('archived_at', null)
-            ->findAll();
+        $db = \Config\Database::connect();
+
+        $projects = $db->table('projects')
+            ->select('projects.*')
+            ->join(
+                'project_members',
+                'project_members.project_id = projects.id AND project_members.user_id = ' . $db->escape($userId),
+                'left'
+            )
+            ->groupStart()
+                ->where('projects.admin_id', $userId)
+                ->orWhere('project_members.user_id', $userId)
+            ->groupEnd()
+            ->where('projects.archived_at', null)
+            ->groupBy('projects.id')
+            ->get()
+            ->getResultArray();
 
         return view('projects/index', [
-            'projects' => $projects
+            'projects' => $projects,
         ]);
     }
 
     public function show($id)
     {
-        $projectModel = new ProjectModel();
-
-        $project = $projectModel
-            ->where('archived_at', null)
-            ->find($id);
-
-        if (! $project) {
-            throw PageNotFoundException::forPageNotFound('Project not found');
-        }
-
+        $access = $this->getProjectAccess($id);
+        $project = $access['project'];
+        
         $memberModel = new ProjectMemberModel();
         $userModel = new UserModel();
 
@@ -51,16 +58,30 @@ class ProjectController extends BaseController
             'project' => $project,
             'members' => $members,
             'users' => $users,
+            'canManage' => $access['is_admin'],
+            'projectRole' => $access['role'],
         ]);
     }
 
     public function create()
     {
+        if (session()->get('role') !== 'admin') {
+            return redirect()
+                ->to('/projects')
+                ->with('error', 'Kamu tidak punya akses untuk membuat project.');
+        }
+
         return view('projects/create');
     }
 
     public function store()
     {
+        if (session()->get('role') !== 'admin') {
+            return redirect()
+                ->to('/projects')
+                ->with('error', 'Kamu tidak punya akses untuk membuat project.');
+        }
+
         $rules = [
             'title' => 'required|min_length[3]|max_length[200]',
             'description' => 'permit_empty|max_length[1000]',
@@ -89,20 +110,28 @@ class ProjectController extends BaseController
 
     public function archive($id)
     {
-    $projectModel = new \App\Models\ProjectModel();
+        $access = $this->getProjectAccess($id);
 
-    $project = $projectModel->find($id);
+        if (! $access['is_admin']) {
+            return redirect()
+                ->to('/projects')
+                ->with('error', 'Kamu tidak punya akses untuk mengarsipkan project ini.');
+        }
+        
+        $projectModel = new ProjectModel();
 
-    if (! $project) {
-        throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound('Project not found');
-    }
+        $project = $projectModel->find($id);
 
-    $projectModel->update($id, [
-        'archived_at' => date('Y-m-d H:i:s'),
-    ]);
+        if (! $project) {
+            throw PageNotFoundException::forPageNotFound('Project not found');
+        }
 
-    return redirect()
-        ->to('/projects')
-        ->with('success', 'Project berhasil diarsipkan.');
+        $projectModel->update($id, [
+            'archived_at' => date('Y-m-d H:i:s'),
+        ]);
+
+        return redirect()
+            ->to('/projects')
+            ->with('success', 'Project berhasil diarsipkan.');
     }
 }

@@ -6,21 +6,51 @@ use CodeIgniter\Controller;
 use CodeIgniter\HTTP\RequestInterface;
 use CodeIgniter\HTTP\ResponseInterface;
 use Psr\Log\LoggerInterface;
+use App\Models\ProjectModel;
+use App\Models\ProjectMemberModel;
+use CodeIgniter\Exceptions\PageNotFoundException;
 
-/**
- * BaseController provides a convenient place for loading components
- * and performing functions that are needed by all your controllers.
- *
- * Extend this class in any new controllers:
- * ```
- *     class Home extends BaseController
- * ```
- *
- * For security, be sure to declare any new methods as protected or private.
- */
 abstract class BaseController extends Controller
 {
-    /**
+    protected function getProjectAccess($projectId)
+    {
+        $userId = session()->get('user_id');
+
+        $projectModel = new ProjectModel();
+
+        $project = $projectModel
+            ->where('archived_at', null)
+            ->find($projectId);
+
+        if (! $project) {
+            throw PageNotFoundException::forPageNotFound('Project not found');
+        }
+
+        if ((int) $project['admin_id'] === (int) $userId) {
+            return [
+                'project' => $project,
+                'role' => 'admin',
+                'is_admin' => true,
+            ];
+        }
+
+        $memberModel = new ProjectMemberModel();
+
+        $member = $memberModel
+            ->where('project_id', $projectId)
+            ->where('user_id', $userId)
+            ->first();
+
+        if ($member) {
+            return [
+                'project' => $project,
+                'role' => $member['role'],
+                'is_admin' => false,
+            ];
+        }
+
+        throw PageNotFoundException::forPageNotFound('Project not found');
+    }    /**
      * Be sure to declare properties for any property fetch you initialized.
      * The creation of dynamic property is deprecated in PHP 8.2.
      */

@@ -24,10 +24,12 @@
 * [x] Basic Project Member Validation
 * [x] Prevent Duplicate Project Members
 * [x] Remove Member from Project
+* [x] Project Role Authorization
+* [x] Project Access Restriction
+* [x] Project Member Management Authorization
 
 #### 🚧 In Progress
 
-* [ ] Project Role Authorization
 * [ ] Project CRUD
 
 #### ❌ Not Started

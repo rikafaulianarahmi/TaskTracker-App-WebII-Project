@@ -4,15 +4,21 @@
 
 ```php
 $routes->get('/', 'AuthController::login');
-$routes->post('/login', 'AuthController::attemptLogin');
 
+$routes->post('/login', 'AuthController::attemptLogin');
 $routes->get('/logout', 'AuthController::logout', ['filter' => 'auth']);
+
 $routes->get('/dashboard', 'DashboardController::index', ['filter' => 'auth']);
 
-$routes->get('/projects', 'ProjectController::index', ['filter' => 'auth']);
-$routes->get('/projects/create', 'ProjectController::create', ['filter' => 'auth']); 
-
+$routes->get('/projects/create', 'ProjectController::create', ['filter' => 'auth']);
 $routes->post('/projects/store', 'ProjectController::store', ['filter' => 'auth']);
+$routes->get('/projects', 'ProjectController::index', ['filter' => 'auth']);
+
+$routes->post('/projects/(:num)/archive', 'ProjectController::archive/$1', ['filter' => 'auth']);
+
+$routes->post('/projects/(:num)/members', 'ProjectMemberController::store/$1', ['filter' => 'auth']);
+$routes->post('/projects/(:num)/members/(:num)/remove', 'ProjectMemberController::remove/$1/$2', ['filter' => 'auth']);
+
 $routes->get('/projects/(:num)', 'ProjectController::show/$1', ['filter' => 'auth']);
 ```
 
@@ -24,8 +30,33 @@ $routes->get('/projects/(:num)', 'ProjectController::show/$1', ['filter' => 'aut
 * Route `/projects/create` digunakan untuk menampilkan form tambah project.
 * Route `/projects/store` digunakan untuk menyimpan data project baru.
 * Route `/projects/(:num)` digunakan untuk menampilkan detail project berdasarkan ID.
+* Route `/projects/(:num)/archive` digunakan untuk mengarsipkan project berdasarkan ID.
+* Route `/projects/(:num)/members` digunakan untuk menambahkan member ke project berdasarkan ID project.
+* Route `/projects/(:num)/members/(:num)/remove` digunakan untuk menghapus member dari project berdasarkan ID project dan ID member.
 
 ## Controller yang sudah dibuat
+
+### BaseController
+
+Fungsi:
+
+* Menyediakan fungsi dasar yang dapat digunakan oleh controller lain.
+* Mengecek akses user terhadap project melalui `getProjectAccess($projectId)`.
+* Mengambil data project berdasarkan ID project.
+* Memastikan project belum diarsipkan melalui pengecekan `archived_at`.
+* Menampilkan halaman 404 jika project tidak ditemukan.
+* Mengecek apakah user yang sedang login adalah admin project.
+* Memberikan akses admin jika `admin_id` project sama dengan `user_id` session.
+* Mengecek apakah user yang sedang login terdaftar sebagai member project.
+* Memberikan akses view kepada user yang terdaftar sebagai member project.
+* Mengembalikan data project, role user, dan status admin.
+* Menolak akses jika user bukan admin dan bukan member project.
+
+Method:
+
+```text
+getProjectAccess($projectId)
+```
 
 ### AuthController
 
@@ -62,18 +93,22 @@ index()
 
 Fungsi:
 
-* Menampilkan daftar project yang belum diarsipkan
-* Menampilkan detail satu project berdasarkan id
-* Hanya menampilkan detail project yang belum diarsipkan
-* Mengambil daftar member project
-* Mengambil data user yang dapat ditambahkan sebagai member project
-* Menampilkan form tambah project
-* Menyimpan data project baru
-* Melakukan validasi input saat membuat project
-* Menampilkan error jika validasi gagal
-* Menampilkan halaman 404 jika project tidak ditemukan
-* Mengarsipkan project dengan mengisi nilai `archived_at`
-* Setelah project diarsipkan, user diarahkan kembali ke halaman daftar project
+* Menampilkan daftar project yang belum diarsipkan.
+* Hanya menampilkan project yang dimiliki user sebagai admin atau member.
+* Menampilkan detail satu project berdasarkan ID.
+* Mengecek akses user ke project melalui `getProjectAccess($id)`.
+* Hanya menampilkan detail project yang belum diarsipkan.
+* Mengambil daftar member project.
+* Mengambil data user yang dapat ditambahkan sebagai member project.
+* Menentukan apakah user dapat mengelola project melalui `canManage`.
+* Menampilkan form tambah project hanya untuk user dengan role `admin`.
+* Menyimpan data project baru hanya untuk user dengan role `admin`.
+* Melakukan validasi input saat membuat project.
+* Menampilkan error jika validasi gagal.
+* Menampilkan halaman 404 jika project tidak ditemukan.
+* Mengarsipkan project hanya jika user adalah admin project.
+* Mengarsipkan project dengan mengisi nilai `archived_at`.
+* Setelah project diarsipkan, user diarahkan kembali ke halaman daftar project.
 
 Method:
 
@@ -83,7 +118,7 @@ show($id)
 create()
 store()
 archive($id)
-'''
+```
 
 ## Model yang sudah dibuat
 
@@ -107,14 +142,16 @@ Fungsi model:
 
 Fungsi:
 
-* Menambahkan user sebagai member project
-* Melakukan validasi input user dan role member
-* Memastikan project yang dituju tersedia
-* Mencegah user yang sama ditambahkan dua kali ke project yang sama
-* Menyimpan role member sebagai `member` atau `klien`
-* Menyimpan waktu bergabung member melalui `joined_at`
-* Menghapus member dari project
-* Menampilkan konfirmasi sebelum member dihapus
+* Menambahkan user sebagai member project.
+* Memastikan hanya admin project yang dapat mengelola member.
+* Melakukan validasi input `user_id` dan `role`.
+* Mengecek akses project melalui `getProjectAccess($projectId)`.
+* Mencegah user yang sama ditambahkan dua kali ke project yang sama.
+* Menyimpan role member sebagai `member` atau `klien`.
+* Menyimpan waktu bergabung member melalui `joined_at`.
+* Menghapus member dari project.
+* Memastikan member yang akan dihapus benar-benar berada pada project tersebut.
+* Menampilkan pesan error jika user tidak memiliki akses atau member tidak ditemukan.
 
 Method:
 
@@ -174,11 +211,17 @@ Session login
 Protected route
 Dashboard setelah login
 Menampilkan daftar project
+Menampilkan daftar project berdasarkan akses user
 Menampilkan detail project
 Membuat project
+Membatasi pembuatan project hanya untuk admin
 Koneksi database melalui model
 Menambah member ke project
+Membatasi pengelolaan member hanya untuk admin project
 Delete member dari project
+Mengarsipkan project
+Membatasi archive project hanya untuk admin project
+Menyembunyikan tombol aksi berdasarkan hak akses user
 ```
 
 ## Catatan sementara
