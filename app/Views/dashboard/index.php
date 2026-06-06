@@ -4,3 +4,4 @@
 <p>Role: <?= esc($role) ?></p>
 
 <a href="/logout">Logout</a>
+<a href="/projects">Projects</a>
