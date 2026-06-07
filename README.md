@@ -68,7 +68,7 @@ Additionally, make sure that the following extensions are enabled in your PHP:
 - [mysqlnd](http://php.net/manual/en/mysqlnd.install.php) if you plan to use MySQL
 - [libcurl](http://php.net/manual/en/curl.requirements.php) if you plan to use the HTTP\CURLRequest library
 
-# TaskTracker-App-WebII-Project
+# TaskTracker [Project Kelompok 11 Pemrograman Web II]
 Project UAS Mata Kuliah Pemrograman Web II
 
 ## About
