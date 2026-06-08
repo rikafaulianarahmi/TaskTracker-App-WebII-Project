@@ -27,18 +27,21 @@
 * [x] Project Role Authorization
 * [x] Project Access Restriction
 * [x] Project Member Management Authorization
+* [x] Task Controller
+* [x] Task Create Form
+* [x] Task Store Logic
+* [x] Basic Task Validation
 
 #### 🚧 In Progress
 
+* [ ] Task Assignment
 * [ ] Project CRUD
+* [ ] Task CRUD
 
 #### ❌ Not Started
 
 ##### Task Module
 
-* [ ] Task Controller
-* [ ] Task CRUD
-* [ ] Task Assignment
 * [ ] Task Status Update
 * [ ] Deadline Handling
 

@@ -19,7 +19,12 @@ $routes->post('/projects/(:num)/archive', 'ProjectController::archive/$1', ['fil
 $routes->post('/projects/(:num)/members', 'ProjectMemberController::store/$1', ['filter' => 'auth']);
 $routes->post('/projects/(:num)/members/(:num)/remove', 'ProjectMemberController::remove/$1/$2', ['filter' => 'auth']);
 
+$routes->get('/projects/(:num)/tasks/create', 'TaskController::create/$1', ['filter' => 'auth']);
+$routes->post('/projects/(:num)/tasks/store', 'TaskController::store/$1', ['filter' => 'auth']);
+
 $routes->get('/projects/(:num)', 'ProjectController::show/$1', ['filter' => 'auth']);
+
+
 ```
 
 * Route `/` digunakan untuk menampilkan halaman login.
@@ -30,6 +35,8 @@ $routes->get('/projects/(:num)', 'ProjectController::show/$1', ['filter' => 'aut
 * Route `/projects/create` digunakan untuk menampilkan form tambah project.
 * Route `/projects/store` digunakan untuk menyimpan data project baru.
 * Route `/projects/(:num)` digunakan untuk menampilkan detail project berdasarkan ID.
+* Route `/projects/(:num)/tasks/create` digunakan untuk menampilkan form tambah task berdasarkan ID project.
+* Route `/projects/(:num)/tasks/store` digunakan untuk menyimpan data task baru berdasarkan ID project.
 * Route `/projects/(:num)/archive` digunakan untuk mengarsipkan project berdasarkan ID.
 * Route `/projects/(:num)/members` digunakan untuk menambahkan member ke project berdasarkan ID project.
 * Route `/projects/(:num)/members/(:num)/remove` digunakan untuk menghapus member dari project berdasarkan ID project dan ID member.
@@ -120,23 +127,26 @@ store()
 archive($id)
 ```
 
-## Model yang sudah dibuat
+### TaskController
+
+Fungsi:
+
+* Menampilkan form tambah task berdasarkan ID project
+* Mengecek apakah user memiliki akses sebagai admin project
+* Mengambil daftar user yang dapat dijadikan assignee
+* Memvalidasi input task seperti title, priority, deadline, dan assignee
+* Mengecek apakah assignee valid untuk project tersebut
+* Menyimpan task baru ke database
+* Mengarahkan kembali ke detail project setelah task berhasil dibuat
+
+Method:
 
 ```text
-UserModel
-ProjectModel
-ProjectMemberModel
-TaskModel
-CommentModel
-ActivityLogModel
+create($projectId)
+store($projectId)
+getAssignableUsers($projectId, $adminId)
+isAssignableUser($projectId, $adminId, $userId)
 ```
-
-Fungsi model:
-
-* Menghubungkan controller dengan tabel database
-* Menentukan nama tabel
-* Menentukan kolom yang boleh diisi
-* Mempermudah query database lewat CI4 Model
 
 ### ProjectMemberController
 
@@ -159,6 +169,24 @@ Method:
 store($projectId)
 remove($projectId, $memberId)
 '''
+
+## Model yang sudah dibuat
+
+```text
+UserModel
+ProjectModel
+ProjectMemberModel
+TaskModel
+CommentModel
+ActivityLogModel
+```
+
+Fungsi model:
+
+* Menghubungkan controller dengan tabel database
+* Menentukan nama tabel
+* Menentukan kolom yang boleh diisi
+* Mempermudah query database lewat CI4 Model
 
 ## Filter yang sudah dibuat
 
@@ -192,6 +220,7 @@ dashboard/index.php
 projects/index.php
 projects/show.php
 projects/create.php
+tasks/create.php
 ```
 
 Fungsi view:
@@ -222,6 +251,12 @@ Delete member dari project
 Mengarsipkan project
 Membatasi archive project hanya untuk admin project
 Menyembunyikan tombol aksi berdasarkan hak akses user
+Menampilkan form tambah task 
+Membuat task baru berdasarkan project 
+Membatasi pembuatan task hanya untuk admin project 
+Memvalidasi input task 
+Menambahkan assignee ke task 
+Membatasi assignee hanya admin project atau member project 
 ```
 
 ## Catatan sementara

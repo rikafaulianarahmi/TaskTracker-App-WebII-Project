@@ -1,5 +1,9 @@
 <h1><?= esc($project['title']) ?></h1>
 
+<?php if ($canManage): ?>
+    <a href="/projects/<?= esc($project['id']) ?>/tasks/create">Create Task</a>
+<?php endif; ?>
+
 <p><?= esc($project['description']) ?></p>
 <p>Status: <?= esc($project['status']) ?></p>
 
