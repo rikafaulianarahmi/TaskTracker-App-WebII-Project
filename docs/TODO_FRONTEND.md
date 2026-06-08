@@ -5,23 +5,21 @@
 * [x] Login Page (Layout dasar, form input email/password)
 * [x] Password Visibility Toggle
 * [x] Session Flash Error Feedback
+* [x] Login Page UI Refinement 
+* [x] Sidebar & Navbar Layout 
+* [x] Dashboard Stats 
+* [x] Activity Log 
 
 #### 🚧 In Progress
 
-* [ ] Login Page UI Refinement 
+* [ ] CRUD Proyek (Tampilan daftar proyek dengan grid card premium, visual progress bar, serta detail & form tambah)
 
 #### ❌ Not Started
 
 ##### 1. Autentikasi & Navigasi
 * [ ] Register / Sign Up Page (Form pendaftaran & pemilihan role/profile)
-* [ ] Sidebar & Navbar Layout (Navigasi responsif untuk Admin, Member, dan Klien)
 
-##### 2. Dashboard 
-* [ ] Dashboard Stats (Jumlah proyek aktif, tugas saya, deadline terdekat)
-* [ ] Feed Aktivitas Terbaru (Log riwayat pengerjaan proyek)
-
-##### 3. Manajemen Proyek
-* [ ] CRUD Proyek (Modal tambah/edit proyek - Khusus Admin)
+##### 2. Manajemen Proyek
 * [ ] Kelola Anggota Proyek (Tambah anggota baru & atur role dalam proyek - Khusus Admin)
 
 ##### 4. Kanban Board (Manajemen Tugas)
