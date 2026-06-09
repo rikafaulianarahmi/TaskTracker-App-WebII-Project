@@ -6,8 +6,6 @@
 
 # Relasi Antar Tabel
 
----
-
 
 ## 1. `users` → `projects`
 
