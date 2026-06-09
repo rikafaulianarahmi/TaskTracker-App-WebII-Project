@@ -2,7 +2,9 @@
 
 <a href="/dashboard">Back to Dashboard</a>
 
+<?php if (session()->get('role') === 'admin'): ?>
 <a href="/projects/create">Create New Project</a>
+<?php endif; ?>
 <?php if (empty($projects)): ?>
     <p>No projects yet.</p>
 <?php endif; ?>
