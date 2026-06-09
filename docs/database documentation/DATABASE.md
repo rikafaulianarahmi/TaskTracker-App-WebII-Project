@@ -1,6 +1,10 @@
+# Entity-Relationship Diagram
 ![ERD](erd.png)
 
-# Relasi Antar Tabel — ERD Manajemen Proyek Tim Kecil
+# Database Schema
+![Schema](schema.png)
+
+# Relasi Antar Tabel
 
 ---
 
