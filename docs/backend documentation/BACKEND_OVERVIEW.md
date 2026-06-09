@@ -168,7 +168,7 @@ Method:
 ```text
 store($projectId)
 remove($projectId, $memberId)
-'''
+```
 
 ## Model yang sudah dibuat
 
