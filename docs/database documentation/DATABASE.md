@@ -27,7 +27,7 @@ Satu user dapat bergabung ke banyak proyek, dan satu proyek dapat memiliki banya
 
 **One-to-Many** via `tasks.project_id`
 
-Satu proyek dapat memiliki banyak task. Setiap task wajib berada di dalam satu proyek — task tidak bisa berdiri sendiri tanpa proyek induk. Jika proyek dihapus, seluruh task di dalamnya ikut terhapus (cascade delete).
+Satu proyek dapat memiliki banyak task. Setiap task wajib berada di dalam satu proyek. Jika proyek dihapus, seluruh task di dalamnya ikut terhapus (cascade delete).
 
 ---
 
@@ -35,7 +35,7 @@ Satu proyek dapat memiliki banyak task. Setiap task wajib berada di dalam satu p
 
 **One-to-Many** via `tasks.created_by`
 
-Satu user (biasanya Admin) dapat membuat banyak task. Kolom `created_by` bersifat NOT NULL — setiap task wajib tercatat siapa yang membuatnya dan tidak bisa null.
+Satu user (biasanya Admin) dapat membuat banyak task. Kolom `created_by` bersifat NOT NULL. Setiap task wajib tercatat siapa yang membuatnya dan tidak bisa null.
 
 ---
 
@@ -43,7 +43,7 @@ Satu user (biasanya Admin) dapat membuat banyak task. Kolom `created_by` bersifa
 
 **One-to-Many** via `tasks.assignee_id`
 
-Satu user (Member) dapat di-assign ke banyak task. Berbeda dengan `created_by`, kolom `assignee_id` bersifat nullable — task boleh belum di-assign ke siapapun saat pertama dibuat, dan bisa diisi belakangan oleh Admin.
+Satu user (Member) dapat di-assign ke banyak task. Berbeda dengan `created_by`, kolom `assignee_id` bersifat nullable. Task boleh belum di-assign ke siapapun saat pertama dibuat, dan bisa diisi belakangan oleh Admin.
 
 ---
 
@@ -59,7 +59,7 @@ Satu task dapat memiliki banyak komentar. Komentar tidak bisa berdiri sendiri ta
 
 **One-to-Many** via `comments.user_id`
 
-Satu user dapat menulis banyak komentar di berbagai task. Setiap komentar wajib tercatat pembuatnya — `user_id` bersifat NOT NULL.
+Satu user dapat menulis banyak komentar di berbagai task. Setiap komentar wajib tercatat pembuatnya (`user_id` bersifat NOT NULL).
 
 ---
 
@@ -67,7 +67,7 @@ Satu user dapat menulis banyak komentar di berbagai task. Setiap komentar wajib 
 
 **One-to-Many** via `activity_logs.user_id`
 
-Satu user dapat menghasilkan banyak log aktivitas. Setiap entri log wajib mencatat siapa pelakunya — `user_id` NOT NULL. Contoh log yang dihasilkan:
+Satu user dapat menghasilkan banyak log aktivitas. Setiap entri log wajib mencatat siapa pelakunya (`user_id` NOT NULL). Contoh log yang dihasilkan:
 
 ```
 user_id: 3 | project_id: 1 | entity_type: task | entity_id: 17
@@ -80,7 +80,7 @@ action: status_changed | detail: "status: todo -> in_progress"
 
 **One-to-Many** via `activity_logs.project_id`
 
-Satu proyek dapat memiliki banyak entri log aktivitas. Kolom ini nullable — log yang bersifat global (misalnya aksi yang tidak terkait proyek manapun) tetap bisa disimpan dengan `project_id = NULL`. Kombinasi dengan `entity_type` + `entity_id` memungkinkan dua jenis query sekaligus: "tampilkan semua log di proyek X" (filter `project_id`) dan "tampilkan semua log yang menyentuh task Y" (filter `entity_type = 'task'` AND `entity_id = Y`).
+Satu proyek dapat memiliki banyak entri log aktivitas. Kolom ini nullable, log yang bersifat global (misalnya aksi yang tidak terkait proyek manapun) tetap bisa disimpan dengan `project_id = NULL`. Kombinasi dengan `entity_type` + `entity_id` memungkinkan dua jenis query sekaligus: "tampilkan semua log di proyek X" (filter `project_id`) dan "tampilkan semua log yang menyentuh task Y" (filter `entity_type = 'task'` AND `entity_id = Y`).
 
 ---
 
