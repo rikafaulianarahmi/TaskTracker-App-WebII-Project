@@ -80,7 +80,7 @@ action: status_changed | detail: "status: todo -> in_progress"
 
 **One-to-Many** via `activity_logs.project_id`
 
-Satu proyek dapat memiliki banyak entri log aktivitas. Kolom ini nullable, log yang bersifat global (misalnya aksi yang tidak terkait proyek manapun) tetap bisa disimpan dengan `project_id = NULL`. Kombinasi dengan `entity_type` + `entity_id` memungkinkan dua jenis query sekaligus: "tampilkan semua log di proyek X" (filter `project_id`) dan "tampilkan semua log yang menyentuh task Y" (filter `entity_type = 'task'` AND `entity_id = Y`).
+Satu proyek dapat memiliki banyak entri log aktivitas. Kolom ini nullable dengan log yang bersifat global (misalnya aksi yang tidak terkait proyek manapun) tetap bisa disimpan dengan `project_id = NULL`. Kombinasi dengan `entity_type` + `entity_id` memungkinkan dua jenis query sekaligus: "tampilkan semua log di proyek X" (filter `project_id`) dan "tampilkan semua log yang menyentuh task Y" (filter `entity_type = 'task'` AND `entity_id = Y`).
 
 ---
 
