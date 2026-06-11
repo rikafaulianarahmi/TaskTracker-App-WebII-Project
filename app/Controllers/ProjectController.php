@@ -65,16 +65,34 @@ class ProjectController extends BaseController
             ->get()
             ->getResultArray();
 
+        $commentsByTask = [];
+
+        if (! empty($tasks)) {
+            $taskIds = array_column($tasks, 'id');
+
+            $comments = $db->table('comments')
+                ->select('comments.*, users.name as user_name')
+                ->join('users', 'users.id = comments.user_id')
+                ->whereIn('comments.task_id', $taskIds)
+                ->orderBy('comments.created_at', 'ASC')
+                ->get()
+                ->getResultArray();
+
+            foreach ($comments as $comment) {
+                $commentsByTask[$comment['task_id']][] = $comment;
+            }
+        }
+
         return view('projects/show', [
             'project' => $project,
             'members' => $members,
             'users' => $users,
             'tasks' => $tasks,
+            'commentsByTask' => $commentsByTask,
             'canManage' => $access['is_admin'],
             'projectRole' => $access['role'],
         ]);
     }
-
     public function create()
     {
         if (session()->get('role') !== 'admin') {

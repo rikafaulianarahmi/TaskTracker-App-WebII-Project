@@ -34,21 +34,22 @@
 * [x] Task Assignment
 * [x] Task Status Update
 * [x] Basic Task Status Authorization
+* [x] Comment Controller
+* [x] Add Comment to Task
+* [x] Display Task Comments
+* [x] Basic Comment Validation
 
 #### 🚧 In Progress
 
 * [ ] Project CRUD
 * [ ] Task CRUD
+* [ ] Comment CRUD
 
 #### ❌ Not Started
 
 ##### Task Module
 
 * [ ] Deadline Handling
-
-##### Comment Module
-
-* [ ] Comment CRUD
 
 ##### Activity Log Module
 

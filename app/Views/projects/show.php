@@ -1,14 +1,3 @@
-<h1><?= esc($project['title']) ?></h1>
-
-<?php if ($canManage): ?>
-    <a href="/projects/<?= esc($project['id']) ?>/tasks/create">Create Task</a>
-<?php endif; ?>
-
-<p><?= esc($project['description']) ?></p>
-<p>Status: <?= esc($project['status']) ?></p>
-
-<hr>
-
 <h2>Tasks</h2>
 
 <?php if (empty($tasks)): ?>
@@ -41,85 +30,35 @@
                     <button type="submit">Update Status</button>
                 </form>
             <?php endif; ?>
+
+            <h4>Comments</h4>
+
+            <?php if (empty($commentsByTask[$task['id']])): ?>
+                <p>No comments yet.</p>
+            <?php else: ?>
+                <?php foreach ($commentsByTask[$task['id']] as $comment): ?>
+                    <div>
+                        <strong><?= esc($comment['user_name']) ?></strong>
+                        <small><?= esc($comment['created_at']) ?></small>
+                        <p><?= esc($comment['body']) ?></p>
+                    </div>
+                <?php endforeach; ?>
+            <?php endif; ?>
+
+            <form action="/tasks/<?= esc($task['id']) ?>/comments" method="post">
+                <?= csrf_field() ?>
+
+                <textarea 
+                    name="body" 
+                    placeholder="Write a comment..."
+                    required
+                ></textarea>
+
+                <br>
+
+                <button type="submit">Add Comment</button>
+            </form>
         </div>
         <hr>
     <?php endforeach; ?>
 <?php endif; ?>
-
-<h2>Project Members</h2>
-
-<?php if (session()->getFlashdata('success')): ?>
-    <p><?= esc(session()->getFlashdata('success')) ?></p>
-<?php endif; ?>
-
-<?php if (session()->getFlashdata('error')): ?>
-    <p><?= esc(session()->getFlashdata('error')) ?></p>
-<?php endif; ?>
-
-<?php if (session()->getFlashdata('errors')): ?>
-    <ul>
-        <?php foreach (session()->getFlashdata('errors') as $error): ?>
-            <li><?= esc($error) ?></li>
-        <?php endforeach; ?>
-    </ul>
-<?php endif; ?>
-
-<?php if (empty($members)): ?>
-    <p>No members yet.</p>
-<?php else: ?>
-    <ul>
-        <?php foreach ($members as $member): ?>
-            <li>
-                <?= esc($member['name']) ?>
-                (<?= esc($member['email']) ?>)
-                - Project Role: <?= esc($member['role']) ?>
-
-                <?php if ($canManage): ?>
-                    <form 
-                        action="/projects/<?= esc($project['id']) ?>/members/<?= esc($member['id']) ?>/remove" 
-                        method="post"
-                        onsubmit="return confirm('Remove this member from project?')"
-                    >
-                        <?= csrf_field() ?>
-                        <button type="submit">Remove</button>
-                    </form>
-                <?php endif; ?>
-            </li>
-        <?php endforeach; ?>
-    </ul>
-<?php endif; ?>
-
-<?php if ($canManage): ?>
-
-    <h3>Add Member</h3>
-
-    <form action="/projects/<?= esc($project['id']) ?>/members" method="post">
-        <?= csrf_field() ?>
-
-        <select name="user_id">
-            <option value="">-- Select User --</option>
-            <?php foreach ($users as $user): ?>
-                <option value="<?= esc($user['id']) ?>">
-                    <?= esc($user['name']) ?> - <?= esc($user['email']) ?>
-                </option>
-            <?php endforeach; ?>
-        </select>
-
-        <select name="role">
-            <option value="member">Member</option>
-            <option value="klien">Klien</option>
-        </select>
-
-        <button type="submit">Add Member</button>
-    </form>
-
-    <form action="/projects/<?= esc($project['id']) ?>/archive" method="post" onsubmit="return confirm('Archive this project?')">
-        <?= csrf_field() ?>
-        <button type="submit">Archive Project</button>
-    </form>
-
-<?php endif; ?>
-
-<br>
-
-<a href="/projects">Back to Projects</a>

@@ -22,6 +22,8 @@ $routes->post('/projects/(:num)/members/(:num)/remove', 'ProjectMemberController
 $routes->get('/projects/(:num)/tasks/create', 'TaskController::create/$1', ['filter' => 'auth']);
 $routes->post('/projects/(:num)/tasks/store', 'TaskController::store/$1', ['filter' => 'auth']);
 $routes->post('/tasks/(:num)/status', 'TaskController::updateStatus/$1', ['filter' => 'auth']);
+
+$routes->post('/tasks/(:num)/comments', 'CommentController::store/$1', ['filter' => 'auth']);
 ```
 
 * Route GET `/` digunakan untuk menampilkan halaman login.
@@ -38,6 +40,7 @@ $routes->post('/tasks/(:num)/status', 'TaskController::updateStatus/$1', ['filte
 * Route POST `/projects/(:num)/archive` digunakan untuk mengarsipkan project berdasarkan ID.
 * Route POST `/projects/(:num)/members` digunakan untuk menambahkan member ke project berdasarkan ID project.
 * Route POST `/projects/(:num)/members/(:num)/remove` digunakan untuk menghapus member dari project berdasarkan ID project dan ID member.
+* Route POST `/tasks/(:num)/comments` digunakan untuk menyimpan komentar baru pada task berdasarkan ID task.
 
 ## Controller yang sudah dibuat
 
@@ -178,6 +181,30 @@ store($projectId)
 remove($projectId, $memberId)
 ```
 
+### CommentController
+
+Fungsi:
+
+* Menambahkan komentar pada task berdasarkan ID task.
+* Mengecek apakah task yang akan dikomentari tersedia di database.
+* Menampilkan pesan error jika task tidak ditemukan.
+* Mengecek akses user ke project melalui `getProjectAccess($projectId)`.
+* Melakukan validasi input komentar melalui field `body`.
+* Membatasi isi komentar maksimal 1000 karakter.
+* Menampilkan pesan error jika validasi komentar gagal.
+* Menyimpan komentar ke database.
+* Menyimpan ID task melalui `task_id`.
+* Menyimpan ID user yang membuat komentar melalui `user_id`.
+* Menyimpan isi komentar melalui `body`.
+* Menyimpan waktu komentar dibuat melalui `created_at`.
+* Mengarahkan kembali ke halaman detail project setelah komentar berhasil ditambahkan.
+
+Method:
+
+```text
+store($taskId)
+```
+
 ## Model yang sudah dibuat
 
 ```text
@@ -242,29 +269,21 @@ Fungsi view:
 ## Fitur yang sudah berjalan
 
 ```text
-Login
-Logout
-Session login
-Protected route
+Login, logout, session login, dan protected route
 Dashboard setelah login
-Menampilkan daftar project
-Menampilkan daftar project berdasarkan akses user
-Menampilkan detail project
-Membuat project
-Membatasi pembuatan project hanya untuk admin
-Koneksi database melalui model
-Menambah member ke project
-Membatasi pengelolaan member hanya untuk admin project
-Delete member dari project
-Mengarsipkan project
-Membatasi archive project hanya untuk admin project
+Menampilkan daftar project berdasarkan akses user sebagai admin atau member
+Menampilkan detail project beserta member, task, dan komentar
+Membuat project dengan batasan hanya untuk user role admin
+Mengarsipkan project dengan batasan hanya untuk admin project
+Menambah dan menghapus member dengan batasan hanya untuk admin project
+Membuat task baru berdasarkan project dengan batasan hanya untuk admin project
+Menambahkan assignee ke task dari admin atau member project
+Memvalidasi input project, member, task, status task, dan komentar
+Menampilkan task beserta status, priority, deadline, assignee, dan pembuat task
+Mengubah status task dengan batasan hanya untuk admin project atau assignee
+Menampilkan dan menambahkan komentar pada setiap task
 Menyembunyikan tombol aksi berdasarkan hak akses user
-Menampilkan form tambah task 
-Membuat task baru berdasarkan project 
-Membatasi pembuatan task hanya untuk admin project 
-Memvalidasi input task 
-Menambahkan assignee ke task 
-Membatasi assignee hanya admin project atau member project 
+Koneksi database melalui model dan query builder
 ```
 
 ## Catatan sementara
