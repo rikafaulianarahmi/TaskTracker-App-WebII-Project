@@ -27,7 +27,6 @@
             }
         }
 
-        /* Floating Keyframe Animations */
         @keyframes float-1 {
             0%, 100% { transform: translateY(0px) rotate(-12deg); }
             50% { transform: translateY(-12px) rotate(-6deg); }
@@ -58,7 +57,7 @@
     <div class="fixed top-[-10%] left-[-10%] w-[450px] h-[450px] rounded-full bg-indigo-300/35 blur-[120px] pointer-events-none z-0"></div>
     <div class="fixed bottom-[-10%] right-[-10%] w-[450px] h-[450px] rounded-full bg-purple-300/35 blur-[120px] pointer-events-none z-0"></div>
 
-    <!-- Background Watermark Icons -->
+    <!-- Background -->
     <svg class="watermark left-[6%] top-[12%] w-11 h-11 animate-float-1" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/>
     </svg>
@@ -78,7 +77,7 @@
         <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/>
     </svg>
 
-    <!-- Background Watermark Icons -->
+    <!-- Background -->
     <svg class="watermark right-[8%] top-[14%] w-11 h-11 animate-float-2" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/>
     </svg>
@@ -109,7 +108,7 @@
                 </svg>
             </div>
             <h1 class="text-2xl font-bold text-slate-800 tracking-tight">TaskTracker</h1>
-            <p class="text-xs text-slate-500 mt-1">Manage your team, without the chaos</p>
+            <p class="text-xs text-slate-700 mt-1">Manage your team, without the chaos</p>
         </div>
 
         <!-- Flash error feedbck -->
@@ -166,7 +165,7 @@
                         <button
                             type="button"
                             onclick="togglePassword()"
-                            class="absolute inset-y-0 right-0 flex items-center pr-3.5 text-slate-400 hover:text-slate-600 transition duration-150"
+                            class="absolute inset-y-0 right-0 flex items-center pr-3.5 text-slate-600 hover:text-slate-800 transition duration-150"
                         >
                             <!-- Eye Icon Show -->
                             <svg id="eye-show" class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -189,7 +188,7 @@
                         name="remember"
                         class="w-4 h-4 rounded border-slate-300 accent-indigo-600 cursor-pointer focus:ring-indigo-500/20"
                     >
-                    <label for="remember" class="text-sm text-slate-500 cursor-pointer select-none">
+                    <label for="remember" class="text-sm text-slate-700 cursor-pointer select-none">
                         Remember me
                     </label>
                 </div>
@@ -207,7 +206,7 @@
             </form>
 
             <!-- Sign Up Link -->
-            <div class="text-center text-sm text-slate-500 mt-8">
+            <div class="text-center text-sm text-slate-700 mt-8">
                 Don't have an account?
                 <a href="/register" class="text-indigo-600 hover:text-indigo-700 font-semibold ml-1 transition duration-150">
                     Sign up
@@ -218,7 +217,7 @@
 
     </div>
 
-    <!-- Toggle Password Visibility Script -->
+    <!-- Toggle Password  -->
     <script>
         function togglePassword() {
             const input = document.getElementById('password');

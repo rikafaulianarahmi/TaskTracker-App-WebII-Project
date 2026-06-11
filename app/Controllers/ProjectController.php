@@ -17,6 +17,8 @@ class ProjectController extends BaseController
 
         $projects = $db->table('projects')
             ->select('projects.*')
+            ->select('(SELECT COUNT(*) FROM tasks WHERE tasks.project_id = projects.id) as total_tasks')
+            ->select('(SELECT COUNT(*) FROM tasks WHERE tasks.project_id = projects.id AND tasks.status = "done") as completed_tasks')
             ->join(
                 'project_members',
                 'project_members.project_id = projects.id AND project_members.user_id = ' . $db->escape($userId),
@@ -31,8 +33,25 @@ class ProjectController extends BaseController
             ->get()
             ->getResultArray();
 
+        $projectIds = array_column($projects, 'id');
+        $membersByProject = [];
+
+        if (! empty($projectIds)) {
+            $members = $db->table('project_members')
+                ->select('project_members.project_id, users.name, users.role')
+                ->join('users', 'users.id = project_members.user_id')
+                ->whereIn('project_members.project_id', $projectIds)
+                ->get()
+                ->getResultArray();
+
+            foreach ($members as $member) {
+                $membersByProject[$member['project_id']][] = $member;
+            }
+        }
+
         return view('projects/index', [
             'projects' => $projects,
+            'membersByProject' => $membersByProject,
         ]);
     }
 
@@ -53,6 +72,10 @@ class ProjectController extends BaseController
         $users = $userModel
             ->where('id !=', $project['admin_id'])
             ->findAll();
+
+        $adminUser = $userModel->find($project['admin_id']);
+        $adminName = $adminUser ? $adminUser['name'] : 'Unknown Admin';
+        $adminEmail = $adminUser ? $adminUser['email'] : '';
 
         $db = \Config\Database::connect();
 
@@ -91,6 +114,8 @@ class ProjectController extends BaseController
             'commentsByTask' => $commentsByTask,
             'canManage' => $access['is_admin'],
             'projectRole' => $access['role'],
+            'adminName' => $adminName,
+            'adminEmail' => $adminEmail,
         ]);
     }
     public function create()
