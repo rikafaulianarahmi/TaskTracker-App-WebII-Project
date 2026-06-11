@@ -19,6 +19,17 @@ class DashboardController extends BaseController
         // Get user's projects
         $projects = $projectModel->getActiveProjectsForUser($userId);
 
+        $activeProjectIds = array_column($projects, 'id');
+        $accessibleProjectIds = $projectModel->getAccessibleProjectIdsForUser($userId);
+
+        if (empty($activeProjectIds)) {
+            $activeProjectIds = [0];
+        }
+
+        if (empty($accessibleProjectIds)) {
+            $accessibleProjectIds = [0];
+        }
+
         $projectIds = array_column($projects, 'id');
         if (empty($projectIds)) {
             $projectIds = [0];
@@ -66,8 +77,8 @@ class DashboardController extends BaseController
         $upcomingDeadlines = $taskModel->getUpcomingDeadlines($projectIds);
 
         // Recent logs
-        $recentLogsRaw = $logModel->getRecentActivity($projectIds, 4);
-
+        $recentLogsRaw = $logModel->getRecentActivity($accessibleProjectIds, 4);
+        
         $recentLogs = array_map(function ($log) {
             return [
                 ...$log,
