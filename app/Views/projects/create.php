@@ -1,41 +1,111 @@
-<h1>Create Project</h1>
+<?= $this->extend('layouts/dashboard') ?>
 
-<a href="/projects">Back to Projects</a>
+<?= $this->section('title') ?>New Project<?= $this->endSection() ?>
 
-<?php if (session()->getFlashdata('errors')): ?>
-    <ul>
-        <?php foreach (session()->getFlashdata('errors') as $error): ?>
-            <li><?= esc($error) ?></li>
-        <?php endforeach; ?>
-    </ul>
-<?php endif; ?>
+<?= $this->section('content') ?>
 
-<form action="/projects/store" method="post">
-    <?= csrf_field() ?>
+<!-- Back Link -->
+<div class="flex justify-start mb-6">
+    <a href="<?= site_url('projects') ?>" class="inline-flex items-center gap-2 py-2.5 px-4 bg-white border border-slate-300 hover:border-indigo-400 hover:bg-indigo-50/30 text-slate-800 hover:text-[#4F46E5] rounded-xl text-sm font-extrabold transition-all duration-200 shadow-sm group">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4 group-hover:-translate-x-0.5 transition-transform">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
+        </svg>
+        Back to Projects
+    </a>
+</div>
 
-    <div>
-        <label>Project Title</label>
-        <br>
-        <input 
-            type="text" 
-            name="title" 
-            value="<?= old('title') ?>"
-            placeholder="Example: Task Tracker App"
-        >
+<!-- Header  -->
+<div class="mb-8">
+    <h2 class="text-3xl font-bold text-slate-900 tracking-tight">New Project</h2>
+    <p class="text-slate-700 mt-1 font-medium">Fill out the form below to start a new project with your team.</p>
+</div>
+
+<!-- Centered Card Wrapper -->
+<div class="flex justify-center w-full py-4">
+    <div class="w-full max-w-2xl bg-white border-t-4 border-t-[#4F46E5] border-x border-b border-slate-200 rounded-[24px] shadow-[0_8px_30px_rgb(0,0,0,0.015)] overflow-hidden">
+        
+        <!-- Error Feedback -->
+        <?php if (session()->getFlashdata('errors')): ?>
+            <div class="p-6 bg-rose-50 border-b border-rose-100 text-rose-800 flex flex-col gap-2">
+                <div class="flex items-center gap-2 font-bold text-sm">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z" />
+                    </svg>
+                    Ada beberapa kesalahan input:
+                </div>
+                <ul class="list-disc list-inside text-xs space-y-1 font-medium pl-6">
+                    <?php foreach (session()->getFlashdata('errors') as $error): ?>
+                        <li><?= esc($error) ?></li>
+                    <?php endforeach; ?>
+                </ul>
+            </div>
+        <?php endif; ?>
+
+        <form action="<?= site_url('projects/store') ?>" method="post" class="p-8 space-y-6">
+            <?= csrf_field() ?>
+
+            <!-- Project Title -->
+            <div class="space-y-2">
+                <label for="title" class="block text-[11px] font-extrabold text-slate-600 uppercase tracking-widest">Project Name</label>
+                <div class="relative rounded-xl shadow-sm">
+                    <span class="absolute inset-y-0 left-0 flex items-center pl-4 text-slate-500">
+                        <!-- Tag / Document Icon -->
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.2" stroke="currentColor" class="w-4.5 h-4.5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M9.568 3H5.25A2.25 2.25 0 0 0 3 5.25v13.5A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V9.75m-6-6 6 6m-6-6v6a.75.75 0 0 0 .75.75h6" />
+                        </svg>
+                    </span>
+                    <input 
+                        type="text" 
+                        id="title"
+                        name="title" 
+                        value="<?= old('title') ?>"
+                        placeholder="e.g. Redesign Website Company Profile"
+                        required
+                        class="w-full bg-[#F8FAFF] border border-slate-200 rounded-xl pl-11 pr-4 py-3.5 text-sm text-slate-800 placeholder-slate-400 focus:bg-white focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all duration-200"
+                    >
+                </div>
+                <span class="text-xs text-slate-600 block pl-1">Minimum 3 characters, maximum 200 characters.</span>
+            </div>
+
+            <!-- Project Description -->
+            <div class="space-y-2">
+                <label for="description" class="block text-[11px] font-extrabold text-slate-600 uppercase tracking-widest">Project Description</label>
+                <textarea 
+                    id="description"
+                    name="description" 
+                    rows="4"
+                    placeholder="Briefly describe the goal of this project, milestones, or other important information..."
+                    class="w-full bg-[#F8FAFF] border border-slate-200 rounded-xl px-4 py-3.5 text-sm text-slate-800 placeholder-slate-400 focus:bg-white focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all duration-200"
+                ><?= old('description') ?></textarea>
+                <span class="text-xs text-slate-600 block pl-1">Maximum 1000 characters. Optional.</span>
+            </div>
+
+            <!-- Decorative Illustration Banner -->
+            <div class="relative w-full h-36 rounded-2xl overflow-hidden border border-slate-100 shadow-sm">
+                <img src="<?= base_url('images/workspace_banner.png') ?>" alt="Workspace Banner" class="w-full h-full object-cover">
+                <div class="absolute inset-0 bg-slate-950/20 flex items-center justify-center">
+                    <span class="bg-gradient-to-r from-indigo-600/90 via-purple-600/90 to-pink-600/90 border border-white/20 text-white font-extrabold text-xs px-6 py-2.5 rounded-full shadow-lg shadow-indigo-500/30 select-none tracking-wider uppercase">
+                        Bring Your Ideas to Life
+                    </span>
+                </div>
+            </div>
+
+            <!-- Form Actions -->
+            <div class="border-t border-slate-100 pt-6 flex items-center justify-end gap-4">
+                <a href="<?= site_url('projects') ?>" 
+                   class="px-4 py-2 text-slate-500 hover:text-slate-800 text-sm font-bold transition-all duration-200">
+                    Cancel
+                </a>
+                <button type="submit" 
+                        class="px-6 py-2.5 rounded-xl bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-50 hover:to-violet-500 active:scale-95 text-white text-sm font-bold transition-all duration-200 shadow-md shadow-indigo-150 flex items-center gap-1.5">
+                    New Project
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
+                    </svg>
+                </button>
+            </div>
+        </form>
     </div>
+</div>
 
-    <br>
-
-    <div>
-        <label>Description</label>
-        <br>
-        <textarea 
-            name="description" 
-            placeholder="Project description"
-        ><?= old('description') ?></textarea>
-    </div>
-
-    <br>
-
-    <button type="submit">Create Project</button>
-</form>
+<?= $this->endSection() ?>
