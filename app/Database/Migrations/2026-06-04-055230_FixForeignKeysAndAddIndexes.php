@@ -44,7 +44,7 @@ class FixForeignKeysAndAddIndexes extends Migration
             'on_update'  => 'CASCADE',
         ],
     ];
- 
+
     private array $indexes = [
         [
             'name'   => 'idx_tasks_status',
@@ -78,7 +78,7 @@ class FixForeignKeysAndAddIndexes extends Migration
  
     public function up()
     {
-        // 1. Fix ON DELETE Rules (CASCADE -> RESTRICT) 
+        // Fix ON DELETE Rules (CASCADE -> RESTRICT) 
         foreach ($this->restrictFKs as $fk) {
             $this->db->query("
                 ALTER TABLE `{$fk['table']}`
@@ -95,7 +95,7 @@ class FixForeignKeysAndAddIndexes extends Migration
             ");
         }
  
-        //  2. Tambah Performance Indexes (single column) 
+        //  Add Performance Indexes (single column) 
         foreach ($this->indexes as $index) {
             $exists = $this->db->query("
                 SELECT COUNT(*) AS cnt
@@ -113,7 +113,7 @@ class FixForeignKeysAndAddIndexes extends Migration
             }
         }
  
-        //  3. Tambah Composite Index (multi-column) 
+        //  Add Composite Index (multi-column) 
         foreach ($this->compositeIndexes as $index) {
             $exists = $this->db->query("
                 SELECT COUNT(*) AS cnt
@@ -136,24 +136,9 @@ class FixForeignKeysAndAddIndexes extends Migration
     // 
     public function down()
     {
-        //  1. Revert FK ke CASCADE (kondisi awal sebelum migration ini) 
-        foreach ($this->restrictFKs as $fk) {
-            $this->db->query("
-                ALTER TABLE `{$fk['table']}`
-                DROP FOREIGN KEY `{$fk['constraint']}`
-            ");
- 
-            $this->db->query("
-                ALTER TABLE `{$fk['table']}`
-                ADD CONSTRAINT `{$fk['constraint']}`
-                FOREIGN KEY (`{$fk['column']}`)
-                REFERENCES `{$fk['ref_table']}` (`{$fk['ref_column']}`)
-                ON DELETE CASCADE
-                ON UPDATE CASCADE
-            ");
-        }
- 
-        //  2. Drop performance indexes (single column) 
+        // Disable foreign key checks to allow index dropping
+        $this->db->query("SET FOREIGN_KEY_CHECKS=0");
+        //  Drop performance indexes (single column) 
         foreach ($this->indexes as $index) {
             $exists = $this->db->query("
                 SELECT COUNT(*) AS cnt
@@ -171,7 +156,7 @@ class FixForeignKeysAndAddIndexes extends Migration
             }
         }
  
-        //  3. Drop composite indexes 
+        //  Drop composite indexes 
         foreach ($this->compositeIndexes as $index) {
             $exists = $this->db->query("
                 SELECT COUNT(*) AS cnt
@@ -188,5 +173,25 @@ class FixForeignKeysAndAddIndexes extends Migration
                 ");
             }
         }
+
+        //  Revert foreign key constraints to CASCADE (original state) 
+        foreach ($this->restrictFKs as $fk) {
+            $this->db->query("
+                ALTER TABLE `{$fk['table']}`
+                DROP FOREIGN KEY IF EXISTS `{$fk['constraint']}`
+            ");
+ 
+            $this->db->query("
+                ALTER TABLE `{$fk['table']}`
+                ADD CONSTRAINT `{$fk['constraint']}`
+                FOREIGN KEY (`{$fk['column']}`)
+                REFERENCES `{$fk['ref_table']}` (`{$fk['ref_column']}`)
+                ON DELETE CASCADE
+                ON UPDATE CASCADE
+            ");
+        }
+
+        // Re-enable foreign key checks
+        $this->db->query("SET FOREIGN_KEY_CHECKS=1");
     }
 }

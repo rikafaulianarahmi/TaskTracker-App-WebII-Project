@@ -23,4 +23,26 @@ class ProjectModel extends Model
             ->groupBy('projects.id')
             ->findAll();
     }
+
+    public function getAccessibleProjectIdsForUser($userId)
+    {
+        $db = \Config\Database::connect();
+
+        $rows = $db->table('projects')
+            ->select('projects.id')
+            ->join(
+                'project_members',
+                'project_members.project_id = projects.id AND project_members.user_id = ' . $db->escape($userId),
+                'left'
+            )
+            ->groupStart()
+                ->where('projects.admin_id', $userId)
+                ->orWhere('project_members.user_id', $userId)
+            ->groupEnd()
+            ->groupBy('projects.id')
+            ->get()
+            ->getResultArray();
+
+        return array_column($rows, 'id');
+    }
 }

@@ -32,13 +32,22 @@ class CommentController extends BaseController
 
         $commentModel = new CommentModel();
 
-        $commentModel->insert([
+        $commentBody = $this->request->getPost('body');
+
+        $commentId = $commentModel->insert([
             'task_id' => $taskId,
             'user_id' => session()->get('user_id'),
-            'body' => $this->request->getPost('body'),
+            'body' => $commentBody,
             'created_at' => date('Y-m-d H:i:s'),
         ]);
 
+        $this->logActivity(
+            $task['project_id'],
+            'comment',
+            $commentId,
+            'created',
+            'Comment added: ' . $commentBody
+        );
         return redirect()
             ->to('/projects/' . $task['project_id'])
             ->with('success', 'Komentar berhasil ditambahkan.');

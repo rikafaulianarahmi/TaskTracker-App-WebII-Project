@@ -211,17 +211,12 @@
                                         <span class="text-xs text-slate-700 font-semibold"><?= esc($t['project_title']) ?></span>
                                     </td>
                                     <td class="py-4">
-                                        <span class="text-xs font-semibold <?= strtotime($t['deadline']) <= strtotime(date('Y-m-d')) ? 'text-rose-600' : 'text-slate-700' ?>">
+                                        <span class="text-xs font-semibold <?= $t['deadlineClass'] ?>">
                                             <?= date('d M Y', strtotime($t['deadline'])) ?>
                                         </span>
                                     </td>
                                     <td class="py-4 text-right">
-                                        <span class="text-[9px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded border inline-block
-                                            <?= $t['priority'] === 'high' 
-                                                ? 'bg-rose-50 text-rose-700 border-rose-200' 
-                                                : ($t['priority'] === 'medium' 
-                                                    ? 'bg-amber-50 text-amber-750 border-amber-200' 
-                                                    : 'bg-slate-100 text-slate-650 border-slate-200') ?>">
+                                        <span class="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full inline-block <?= $t['priorityClass'] ?>">
                                             <?= $t['priority'] ?>
                                         </span>
                                     </td>
@@ -264,10 +259,11 @@
                                 </span>
                             </div>
                             
-                            <div class="min-w-0 flex-1">
-                                <h4 class="font-bold text-slate-900 text-xs sm:text-sm truncate"><?= esc($u['title']) ?></h4>
-                                <p class="text-[11px] text-slate-600 mt-0.5 font-medium truncate">Project: <?= esc($u['project_title']) ?></p>
-                            </div>
+                            <span class="text-[10px] font-extrabold text-indigo-600 uppercase tracking-wider block">
+                                <?= esc($u['daysLabel']) ?>
+                            </span>
+                            <h4 class="font-bold text-slate-900 text-sm mt-0.5"><?= esc($u['title']) ?></h4>
+                            <p class="text-xs text-slate-500 mt-1"><?= esc($u['project_title']) ?> • <?= date('d M Y', strtotime($u['deadline'])) ?></p>
                         </div>
                     <?php endforeach; ?>
                 <?php endif; ?>
@@ -287,36 +283,20 @@
                 <?php if (empty($recentLogs)): ?>
                     <p class="text-sm text-slate-600 py-2">No activity recorded yet.</p>
                 <?php else: ?>
-                    <?php foreach ($recentLogs as $l): ?>
-                        <div class="flex items-start gap-3.5 text-xs sm:text-sm">
-                            
-                            <!-- Action Avatar -->
-                            <?php 
-                                $u_name = $l['user_name'] ?? 'U';
-                                $initial = strtoupper(substr($u_name, 0, 1));
-                            ?>
-                            <div class="h-9 w-9 bg-[#E0E7FF] border border-indigo-150/50 rounded-xl flex items-center justify-center font-bold text-[#4F46E5] text-xs shrink-0 select-none shadow-sm mt-0.5">
-                                <?= $initial ?>
+                    <?php foreach ($recentLogs as $log): ?>
+                        <div class="flex gap-3 text-sm">
+                            <div class="h-8 w-8 bg-indigo-50 text-indigo-700 font-bold rounded-lg flex items-center justify-center text-xs shrink-0 border border-indigo-100">
+                                <?= strtoupper(substr($log['user_name'], 0, 1)) ?>
                             </div>
-                            
-                            <div class="min-w-0 flex-1 leading-normal text-xs sm:text-sm">
-                                <p class="text-slate-600">
-                                    <span class="font-bold text-slate-800"><?= esc($l['user_name']) ?></span> 
-                                    <?php 
-                                        if ($l['action'] === 'created') echo 'created ' . esc($l['entity_type']);
-                                        elseif ($l['action'] === 'updated') echo 'updated ' . esc($l['entity_type']);
-                                        elseif ($l['action'] === 'status_changed') echo 'changed status of ' . esc($l['entity_type']);
-                                        elseif ($l['action'] === 'archived') echo 'archived project';
-                                        else echo esc($l['action']);
-                                    ?>
-                                    <?php if ($l['detail']): ?>
-                                        <span class="text-indigo-600 font-bold">"<?= esc($l['detail']) ?>"</span>
-                                    <?php endif; ?>
-                                    <?php if ($l['project_title']): ?>
-                                        in project <span class="font-bold text-slate-900"><?= esc($l['project_title']) ?></span>
-                                    <?php endif; ?>
+
+                            <div>
+                                <p class="text-slate-800 leading-normal">
+                                    <?= esc($log['message']) ?>
                                 </p>
-                                <span class="text-[10px] text-slate-600 font-semibold mt-1 inline-block"><?= date('H:i, d M Y', strtotime($l['created_at'])) ?></span>
+
+                                <span class="text-[10px] text-slate-400 font-medium mt-1 inline-block">
+                                    <?= esc($log['formatted_time']) ?>
+                                </span>
                             </div>
                         </div>
                     <?php endforeach; ?>

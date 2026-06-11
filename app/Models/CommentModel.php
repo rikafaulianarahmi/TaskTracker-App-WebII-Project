@@ -8,6 +8,12 @@ class CommentModel extends Model
 {
     protected $table = 'comments';
     protected $primaryKey = 'id';
-    protected $allowedFields = ['task_id', 'user_id', 'body'];
+    protected $allowedFields = [
+    'task_id',
+    'user_id',
+    'body',
+    'created_at',
+];
+
     protected $useTimestamps = false;
 }

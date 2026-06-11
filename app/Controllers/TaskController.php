@@ -60,7 +60,7 @@ class TaskController extends BaseController
 
         $taskModel = new TaskModel();
 
-        $taskModel->insert([
+        $taskId = $taskModel->insert([
             'project_id' => $projectId,
             'title' => $this->request->getPost('title'),
             'description' => $this->request->getPost('description'),
@@ -70,6 +70,14 @@ class TaskController extends BaseController
             'priority' => $this->request->getPost('priority'),
             'deadline' => $this->request->getPost('deadline') ?: null,
         ]);
+
+        $this->logActivity(
+            $projectId,
+            'task',
+            $taskId,
+            'created',
+            'Task created: ' . $this->request->getPost('title')
+        );
 
         return redirect()
             ->to('/projects/' . $projectId)
@@ -108,9 +116,19 @@ class TaskController extends BaseController
                 ->with('errors', $this->validator->getErrors());
         }
 
+        $newStatus = $this->request->getPost('status');
+
         $taskModel->update($taskId, [
-            'status' => $this->request->getPost('status'),
+            'status' => $newStatus,
         ]);
+
+        $this->logActivity(
+            $task['project_id'],
+            'task',
+            $taskId,
+            'status_updated',
+            'Task status changed to ' . $newStatus
+        );
 
         return redirect()
             ->to('/projects/' . $task['project_id'])

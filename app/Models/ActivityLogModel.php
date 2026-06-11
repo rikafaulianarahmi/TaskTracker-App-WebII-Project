@@ -8,6 +8,7 @@ class ActivityLogModel extends Model
 {
     protected $table = 'activity_logs';
     protected $primaryKey = 'id';
+    
     protected $allowedFields = [
         'user_id',
         'project_id',
@@ -15,11 +16,16 @@ class ActivityLogModel extends Model
         'entity_id',
         'action',
         'detail',
+        'created_at',
     ];
     protected $useTimestamps = false;
 
-    public function getRecentActivity(array $projectIds, $limit = 4)
+    public function getRecentActivity(array $projectIds, int $limit = 4)
     {
+        if (empty($projectIds)) {
+            return [];
+        }
+
         return $this->select('activity_logs.*, users.name as user_name, projects.title as project_title')
             ->join('users', 'users.id = activity_logs.user_id')
             ->join('projects', 'projects.id = activity_logs.project_id', 'left')

@@ -50,16 +50,23 @@ abstract class BaseController extends Controller
         }
 
         throw PageNotFoundException::forPageNotFound('Project not found');
-    }    /**
-     * Be sure to declare properties for any property fetch you initialized.
-     * The creation of dynamic property is deprecated in PHP 8.2.
-     */
+    } 
 
-    // protected $session;
+    protected function logActivity($projectId, $entityType, $entityId, $action, $detail = null)
+    {
+        $logModel = new \App\Models\ActivityLogModel();
 
-    /**
-     * @return void
-     */
+        $logModel->insert([
+            'user_id' => session()->get('user_id'),
+            'project_id' => $projectId,
+            'entity_type' => $entityType,
+            'entity_id' => $entityId,
+            'action' => $action,
+            'detail' => $detail,
+            'created_at' => date('Y-m-d H:i:s'),
+        ]);
+    }
+    
     public function initController(RequestInterface $request, ResponseInterface $response, LoggerInterface $logger)
     {
         // Load here all helpers you want to be available in your controllers that extend BaseController.

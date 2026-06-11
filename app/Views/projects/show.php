@@ -1,4 +1,37 @@
-<?= $this->extend('layouts/dashboard') ?>
+<?php if ($canManage): ?>
+    <p>
+        <a href="/projects/<?= esc($project['id']) ?>/tasks/create">
+            Create New Task
+        </a>
+    </p>
+
+    <form 
+        action="/projects/<?= esc($project['id']) ?>/archive" 
+        method="post"
+        onsubmit="return confirm('Are you sure you want to archive this project?');"
+    >
+        <?= csrf_field() ?>
+
+        <button type="submit">
+            Archive Project
+        </button>
+    </form>
+<?php endif; ?>
+
+<h2>Tasks</h2>
+
+<?php if (empty($tasks)): ?>
+    <p>No tasks yet.</p>
+<?php else: ?>
+    <?php foreach ($tasks as $task): ?>
+        <div>
+            <h3><?= esc($task['title']) ?></h3>
+            <p><?= esc($task['description']) ?></p>
+            <p>Status: <?= esc($task['status']) ?></p>
+            <p>Priority: <?= esc($task['priority']) ?></p>
+            <p>Deadline: <?= esc($task['deadline'] ?? '-') ?></p>
+            <p>Assignee: <?= esc($task['assignee_name'] ?? 'Unassigned') ?></p>
+            <p>Created by: <?= esc($task['creator_name'] ?? '-') ?></p>
 
 <?= $this->section('title') ?><?= esc($project['title']) ?><?= $this->endSection() ?>
 
@@ -361,60 +394,31 @@
 
             </div>
         </div>
+        <hr>
+    <?php endforeach; ?>
+<?php endif; ?>
 
-        <!-- Add Member Form Card (Admin Only) -->
-        <?php if ($canManage): ?>
-            <?php
-                // Filter users to exclude who are already in members and also exclude the admin
-                $existingMemberIds = array_column($members, 'user_id');
-                $nonMembers = [];
-                foreach ($users as $user) {
-                    if (!in_array($user['id'], $existingMemberIds)) {
-                        $nonMembers[] = $user;
-                    }
-                }
-            ?>
-            <div class="bg-white border border-slate-100 rounded-3xl p-6 shadow-[0_8px_30px_rgb(0,0,0,0.015)]">
-                <h3 class="text-base font-bold text-slate-900 mb-1">Add Member</h3>
-                <p class="text-xs text-slate-600 mb-4">Add a user who has not joined the team yet.</p>
+<hr>
 
-                <?php if (empty($nonMembers)): ?>
-                    <p class="text-xs text-slate-600 font-semibold italic text-center py-4">All registered users are already added to this project.</p>
-                <?php else: ?>
-                    <form action="<?= site_url('projects/' . esc($project['id']) . '/members') ?>" method="post" class="space-y-4">
-                        <?= csrf_field() ?>
+<h2>Activity Logs</h2>
 
-                        <!-- Select User -->
-                        <div class="space-y-1.5">
-                            <label for="user_id" class="block text-[11px] font-bold text-slate-700 uppercase tracking-wider">Select User</label>
-                            <select id="user_id" name="user_id" required class="w-full bg-white border border-slate-200 rounded-xl px-4 py-3 text-xs text-slate-700 focus:outline-none focus:border-indigo-400 focus:ring-1 focus:ring-indigo-400 shadow-sm">
-                                <option value="" disabled selected>-- Select User --</option>
-                                <?php foreach ($nonMembers as $user): ?>
-                                    <option value="<?= esc($user['id']) ?>"><?= esc($user['name']) ?> (<?= esc($user['role']) ?>)</option>
-                                <?php endforeach; ?>
-                            </select>
-                        </div>
+<?php if (empty($activityLogs)): ?>
+    <p>No activity yet.</p>
+<?php else: ?>
+    <ul>
+        <?php foreach ($activityLogs as $log): ?>
+            <li>
+                <strong><?= esc($log['user_name']) ?></strong>
+                <?= esc($log['action']) ?>
+                <?= esc($log['entity_type']) ?>
 
-                        <!-- Select Project Role -->
-                        <div class="space-y-1.5">
-                            <label for="role" class="block text-[11px] font-bold text-slate-700 uppercase tracking-wider">Project Role</label>
-                            <select id="role" name="role" required class="w-full bg-white border border-slate-200 rounded-xl px-4 py-3 text-xs text-slate-700 focus:outline-none focus:border-indigo-400 focus:ring-1 focus:ring-indigo-400 shadow-sm">
-                                <option value="member" selected>Member (Team Member)</option>
-                                <option value="klien">Client (View Only)</option>
-                            </select>
-                        </div>
-
-                        <!-- Submit Button -->
-                        <button type="submit" class="w-full bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-50 hover:to-violet-500 active:scale-95 text-white text-xs font-bold py-3 px-4 rounded-xl transition-all shadow-md shadow-indigo-100/80">
-                            Add to Project
-                        </button>
-                    </form>
+                <?php if (! empty($log['detail'])): ?>
+                    - <?= esc($log['detail']) ?>
                 <?php endif; ?>
-            </div>
-        <?php endif; ?>
 
-    </div>
-
-</div>
-
-<?= $this->endSection() ?>
+                <br>
+                <small><?= esc($log['created_at']) ?></small>
+            </li>
+        <?php endforeach; ?>
+    </ul>
+<?php endif; ?>
