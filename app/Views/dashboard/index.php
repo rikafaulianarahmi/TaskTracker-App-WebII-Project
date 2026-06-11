@@ -11,13 +11,11 @@
         <p class="text-slate-700 mt-1 font-medium">Here's an overview of your productivity today.</p>
     </div>
 
-    <?php if (session()->get('role') === 'admin'): ?>
-        <a href="<?= site_url('projects/create') ?>"
-           class="inline-flex items-center justify-center gap-2 bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 text-white px-4 py-2.5 rounded-xl text-sm font-bold shadow-sm transition-all active:scale-95">
-            <span>+</span>
-            Create Project
-        </a>
-    <?php endif; ?>
+    <a href="<?= site_url('projects/create') ?>"
+       class="inline-flex items-center justify-center gap-2 bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 text-white px-4 py-2.5 rounded-xl text-sm font-bold shadow-sm transition-all active:scale-95">
+        <span>+</span>
+        Create Project
+    </a>
 </div>
 
 <!-- Stats Grid -->
