@@ -1,3 +1,11 @@
+<?php if ($canManage): ?>
+    <p>
+        <a href="/projects/<?= esc($project['id']) ?>/tasks/create">
+            Create New Task
+        </a>
+    </p>
+<?php endif; ?>
+
 <h2>Tasks</h2>
 
 <?php if (empty($tasks)): ?>
