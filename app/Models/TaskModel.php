@@ -49,20 +49,25 @@ class TaskModel extends Model
             ->join('projects', 'projects.id = tasks.project_id')
             ->where('tasks.assignee_id', $userId)
             ->where('tasks.status !=', 'done')
+            ->where('projects.archived_at', null)
             ->orderBy('tasks.deadline', 'ASC')
-            ->limit(3)
             ->findAll();
     }
 
-    public function getUpcomingDeadlines(array $projectIds)
+    public function getUpcomingDeadlines(array $projectIds, int $limit = 5)
     {
+        if (empty($projectIds)) {
+            return [];
+        }
+
         return $this->select('tasks.*, projects.title as project_title')
             ->join('projects', 'projects.id = tasks.project_id')
             ->whereIn('tasks.project_id', $projectIds)
-            ->where('tasks.deadline >=', date('Y-m-d'))
+            ->where('tasks.deadline IS NOT NULL', null, false)
             ->where('tasks.status !=', 'done')
+            ->where('projects.archived_at', null)
             ->orderBy('tasks.deadline', 'ASC')
-            ->limit(3)
+            ->limit($limit)
             ->findAll();
     }
 }

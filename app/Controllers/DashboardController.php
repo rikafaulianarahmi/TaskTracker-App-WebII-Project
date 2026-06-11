@@ -74,11 +74,11 @@ class DashboardController extends BaseController
         $myTasks = $taskModel->getMyTasks($userId);
 
         // Upcoming Deadlines
-        $upcomingDeadlines = $taskModel->getUpcomingDeadlines($projectIds);
+        $upcomingDeadlines = $taskModel->getUpcomingDeadlines($activeProjectIds);
 
         // Recent logs
         $recentLogsRaw = $logModel->getRecentActivity($accessibleProjectIds, 4);
-        
+
         $recentLogs = array_map(function ($log) {
             return [
                 ...$log,
