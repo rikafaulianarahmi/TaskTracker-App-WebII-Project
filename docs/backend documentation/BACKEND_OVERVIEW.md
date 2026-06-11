@@ -59,11 +59,15 @@ Fungsi:
 * Memberikan akses view kepada user yang terdaftar sebagai member project.
 * Mengembalikan data project, role user, dan status admin.
 * Menolak akses jika user bukan admin dan bukan member project.
+* Mencatat aktivitas user pada project melalui `logActivity()`.
+* Menyimpan log aktivitas seperti aksi create, update, delete, atau aksi lainnya.
+* Menyimpan informasi log berupa user, project, jenis entity, ID entity, aksi, detail, dan waktu aktivitas.
 
 Method:
 
 ```text
 getProjectAccess($projectId)
+logActivity($projectId, $entityType, $entityId, $action, $detail = null)
 ```
 
 ### AuthController
@@ -122,6 +126,10 @@ Fungsi:
 * Menampilkan task pada halaman detail project.
 * Menampilkan informasi task seperti title, description, status, priority, deadline, assignee, dan creator.
 * Mengirim data task ke view melalui variabel tasks.
+* Mengirim data activity log ke view melalui variabel activityLogs.
+* Mencatat activity log saat project dibuat.
+* Mencatat activity log saat project diarsipkan.
+
 Method:
 
 ```text
@@ -148,6 +156,8 @@ Fungsi:
 * Mengizinkan assignee untuk mengubah status task miliknya sendiri.
 * Memvalidasi status task agar hanya bernilai `todo`, `in_progress`, atau `done`.
 * Mengarahkan kembali ke halaman detail project setelah status task berhasil diubah.
+* Mencatat activity log saat task dibuat.
+* Mencatat activity log saat status task diperbarui.
 
 Method:
 
@@ -198,6 +208,7 @@ Fungsi:
 * Menyimpan isi komentar melalui `body`.
 * Menyimpan waktu komentar dibuat melalui `created_at`.
 * Mengarahkan kembali ke halaman detail project setelah komentar berhasil ditambahkan.
+* Mencatat activity log saat komentar ditambahkan.
 
 Method:
 
@@ -238,13 +249,17 @@ Route yang sudah memakai AuthFilter:
 ```text
 /logout
 /dashboard
+/projects
 /projects/create
 /projects/store
-/projects
+/projects/{id}
 /projects/{id}/archive
 /projects/{id}/members
 /projects/{projectId}/members/{memberId}/remove
-/projects/{id}
+/projects/{id}/tasks/create
+/projects/{id}/tasks/store
+/tasks/{id}/status
+/tasks/{id}/comments
 ```
 
 ## View yang sudah dibuat   
@@ -269,21 +284,73 @@ Fungsi view:
 ## Fitur yang sudah berjalan
 
 ```text
-Login, logout, session login, dan protected route
-Dashboard setelah login
-Menampilkan daftar project berdasarkan akses user sebagai admin atau member
-Menampilkan detail project beserta member, task, dan komentar
-Membuat project dengan batasan hanya untuk user role admin
-Mengarsipkan project dengan batasan hanya untuk admin project
-Menambah dan menghapus member dengan batasan hanya untuk admin project
-Membuat task baru berdasarkan project dengan batasan hanya untuk admin project
-Menambahkan assignee ke task dari admin atau member project
-Memvalidasi input project, member, task, status task, dan komentar
-Menampilkan task beserta status, priority, deadline, assignee, dan pembuat task
-Mengubah status task dengan batasan hanya untuk admin project atau assignee
-Menampilkan dan menambahkan komentar pada setiap task
-Menyembunyikan tombol aksi berdasarkan hak akses user
-Koneksi database melalui model dan query builder
+Login, logout, session login, dan protected route Dashboard setelah login 
+Menampilkan daftar project berdasarkan akses user sebagai admin atau member 
+Menampilkan detail project beserta member, task, komentar, dan activity log 
+Membuat project dengan batasan hanya untuk user role admin 
+Mencatat activity log saat project dibuat 
+Mengarsipkan project dengan batasan hanya untuk admin project 
+Mencatat activity log saat project diarsipkan 
+Menambah dan menghapus member dengan batasan hanya untuk admin project 
+Membuat task baru berdasarkan project dengan batasan hanya untuk admin project 
+Mencatat activity log saat task dibuat 
+Menambahkan assignee ke task dari admin atau member project 
+Memvalidasi input project, member, task, status task, dan komentar 
+Menampilkan task beserta status, priority, deadline, assignee, dan pembuat task 
+Mengubah status task dengan batasan hanya untuk admin project atau assignee 
+Mencatat activity log saat status task diperbarui 
+Menampilkan dan menambahkan komentar pada setiap task 
+Mencatat activity log saat komentar ditambahkan 
+Menampilkan riwayat activity log berdasarkan aktivitas terbaru 
+Menyembunyikan tombol aksi berdasarkan hak akses user Koneksi database melalui model dan query builder
+```
+
+### Activity Log
+
+Fungsi:
+
+* Mencatat aktivitas user yang terjadi di dalam project.
+* Menyimpan riwayat aktivitas agar perubahan pada project dapat dilihat kembali.
+* Menampilkan daftar aktivitas pada halaman detail project.
+* Mengambil data activity log berdasarkan project_id.
+* Menghubungkan activity log dengan tabel users untuk menampilkan nama user yang melakukan aktivitas.
+* Mengurutkan activity log berdasarkan waktu terbaru menggunakan created_at DESC.
+
+#### Data yang dicatat:
+
+```text
+user_id yaitu ID user yang melakukan aktivitas.
+project_id yaitu ID project tempat aktivitas terjadi.
+entity_type yaitu jenis data yang terkena aktivitas, seperti project, task, atau comment.
+entity_id yaitu ID dari data yang terkena aktivitas.
+action yaitu aksi yang dilakukan, seperti created, archived, atau status_updated.
+detail yaitu keterangan tambahan dari aktivitas.
+created_at yaitu waktu aktivitas dilakukan.
+```
+
+#### Aktivitas yang dicatat:
+
+```text
+Project dibuat.
+Project diarsipkan.
+Task dibuat.
+Status task diperbarui.
+Komentar ditambahkan pada task.
+```
+
+#### Controller yang menggunakan Activity Log:
+
+```text
+BaseController menyediakan method logActivity() untuk menyimpan activity log.
+ProjectController mencatat aktivitas saat project dibuat dan diarsipkan.
+TaskController mencatat aktivitas saat task dibuat dan status task diperbarui.
+CommentController mencatat aktivitas saat komentar ditambahkan.
+```
+
+Method:
+
+```text
+logActivity($projectId, $entityType, $entityId, $action, $detail = null)
 ```
 
 ## Catatan sementara

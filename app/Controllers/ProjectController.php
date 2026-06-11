@@ -83,12 +83,21 @@ class ProjectController extends BaseController
             }
         }
 
+        $activityLogs = $db->table('activity_logs')
+            ->select('activity_logs.*, users.name as user_name')
+            ->join('users', 'users.id = activity_logs.user_id')
+            ->where('activity_logs.project_id', $id)
+            ->orderBy('activity_logs.created_at', 'DESC')
+            ->get()
+            ->getResultArray();
+
         return view('projects/show', [
             'project' => $project,
             'members' => $members,
             'users' => $users,
             'tasks' => $tasks,
             'commentsByTask' => $commentsByTask,
+            'activityLogs' => $activityLogs,
             'canManage' => $access['is_admin'],
             'projectRole' => $access['role'],
         ]);
@@ -126,12 +135,20 @@ class ProjectController extends BaseController
 
         $projectModel = new ProjectModel();
 
-        $projectModel->insert([
+        $projectId = $projectModel->insert([
             'title' => $this->request->getPost('title'),
             'description' => $this->request->getPost('description'),
             'admin_id' => session()->get('user_id'),
             'status' => 'active',
         ]);
+
+        $this->logActivity(
+            $projectId,
+            'project',
+            $projectId,
+            'created',
+            'Project created'
+        );
 
         return redirect()
             ->to('/projects')
@@ -159,6 +176,14 @@ class ProjectController extends BaseController
         $projectModel->update($id, [
             'archived_at' => date('Y-m-d H:i:s'),
         ]);
+
+        $this->logActivity(
+            $id,
+            'project',
+            $id,
+            'archived',
+            'Project archived'
+        );
 
         return redirect()
             ->to('/projects')

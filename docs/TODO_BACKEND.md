@@ -38,6 +38,8 @@
 * [x] Add Comment to Task
 * [x] Display Task Comments
 * [x] Basic Comment Validation
+* [x] Activity Log Recording
+* [x] Activity Log Display
 
 #### 🚧 In Progress
 
@@ -50,11 +52,6 @@
 ##### Task Module
 
 * [ ] Deadline Handling
-
-##### Activity Log Module
-
-* [ ] Activity Log Recording
-* [ ] Activity Log Display
 
 ##### Validation & Security
 

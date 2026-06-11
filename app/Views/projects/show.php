@@ -62,3 +62,28 @@
         <hr>
     <?php endforeach; ?>
 <?php endif; ?>
+
+<hr>
+
+<h2>Activity Logs</h2>
+
+<?php if (empty($activityLogs)): ?>
+    <p>No activity yet.</p>
+<?php else: ?>
+    <ul>
+        <?php foreach ($activityLogs as $log): ?>
+            <li>
+                <strong><?= esc($log['user_name']) ?></strong>
+                <?= esc($log['action']) ?>
+                <?= esc($log['entity_type']) ?>
+
+                <?php if (! empty($log['detail'])): ?>
+                    - <?= esc($log['detail']) ?>
+                <?php endif; ?>
+
+                <br>
+                <small><?= esc($log['created_at']) ?></small>
+            </li>
+        <?php endforeach; ?>
+    </ul>
+<?php endif; ?>
