@@ -9,6 +9,25 @@
 
 <hr>
 
+<h2>Tasks</h2>
+
+<?php if (empty($tasks)): ?>
+    <p>No tasks yet.</p>
+<?php else: ?>
+    <?php foreach ($tasks as $task): ?>
+        <div>
+            <h3><?= esc($task['title']) ?></h3>
+            <p><?= esc($task['description']) ?></p>
+            <p>Status: <?= esc($task['status']) ?></p>
+            <p>Priority: <?= esc($task['priority']) ?></p>
+            <p>Deadline: <?= esc($task['deadline'] ?? '-') ?></p>
+            <p>Assignee: <?= esc($task['assignee_name'] ?? 'Unassigned') ?></p>
+            <p>Created by: <?= esc($task['creator_name'] ?? '-') ?></p>
+        </div>
+        <hr>
+    <?php endforeach; ?>
+<?php endif; ?>
+
 <h2>Project Members</h2>
 
 <?php if (session()->getFlashdata('success')): ?>

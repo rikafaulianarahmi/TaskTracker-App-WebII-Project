@@ -31,10 +31,10 @@
 * [x] Task Create Form
 * [x] Task Store Logic
 * [x] Basic Task Validation
+* [x] Task Assignment
 
 #### 🚧 In Progress
 
-* [ ] Task Assignment
 * [ ] Project CRUD
 * [ ] Task CRUD
 

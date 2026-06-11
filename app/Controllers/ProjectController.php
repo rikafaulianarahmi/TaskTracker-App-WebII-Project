@@ -54,10 +54,22 @@ class ProjectController extends BaseController
             ->where('id !=', $project['admin_id'])
             ->findAll();
 
+        $db = \Config\Database::connect();
+
+        $tasks = $db->table('tasks')
+            ->select('tasks.*, assignee.name as assignee_name, creator.name as creator_name')
+            ->join('users as assignee', 'assignee.id = tasks.assignee_id', 'left')
+            ->join('users as creator', 'creator.id = tasks.created_by', 'left')
+            ->where('tasks.project_id', $id)
+            ->orderBy('tasks.created_at', 'DESC')
+            ->get()
+            ->getResultArray();
+
         return view('projects/show', [
             'project' => $project,
             'members' => $members,
             'users' => $users,
+            'tasks' => $tasks,
             'canManage' => $access['is_admin'],
             'projectRole' => $access['role'],
         ]);

@@ -116,7 +116,11 @@ Fungsi:
 * Mengarsipkan project hanya jika user adalah admin project.
 * Mengarsipkan project dengan mengisi nilai `archived_at`.
 * Setelah project diarsipkan, user diarahkan kembali ke halaman daftar project.
-
+* Mengambil daftar task berdasarkan project ID.
+* Mengambil data task beserta nama assignee dan nama creator.
+* Menampilkan task pada halaman detail project.
+* Menampilkan informasi task seperti title, description, status, priority, deadline, assignee, dan creator.
+* Mengirim data task ke view melalui variabel tasks.
 Method:
 
 ```text
