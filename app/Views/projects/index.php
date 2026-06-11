@@ -10,6 +10,11 @@
         <h2 class="text-3xl font-bold text-slate-900 tracking-tight">Projects</h2>
         <p class="text-slate-700 mt-1">List of all active projects you are participating in.</p>
     </div>
+    <?php if (session()->get('role') === 'admin'): ?>
+        <a href="<?= site_url('projects/create') ?>" class="inline-flex items-center gap-2 py-2.5 px-5 bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 text-white rounded-xl text-sm font-bold transition-all duration-200 shadow-md shadow-indigo-100">
+            Create New Project
+        </a>
+    <?php endif; ?>
 </div>
 
 <!-- Alert Feedback -->
