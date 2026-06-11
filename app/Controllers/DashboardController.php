@@ -136,11 +136,11 @@ class DashboardController extends BaseController
         }
 
         if ($entity === 'project' && $action === 'created') {
-            return "{$user} membuat project baru.";
+            return "{$user} membuat project baru. {$detail}";
         }
 
         if ($entity === 'project' && $action === 'archived') {
-            return "{$user} mengarsipkan project.";
+            return "{$user} mengarsipkan project. {$detail}";
         }
 
         if ($entity === 'member' && $action === 'created') {

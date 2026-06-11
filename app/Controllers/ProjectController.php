@@ -135,8 +135,10 @@ class ProjectController extends BaseController
 
         $projectModel = new ProjectModel();
 
+        $title = $this->request->getPost('title');
+
         $projectId = $projectModel->insert([
-            'title' => $this->request->getPost('title'),
+            'title' => $title,
             'description' => $this->request->getPost('description'),
             'admin_id' => session()->get('user_id'),
             'status' => 'active',
@@ -147,7 +149,7 @@ class ProjectController extends BaseController
             'project',
             $projectId,
             'created',
-            'Project created'
+            'Project created: ' . $title
         );
 
         return redirect()
@@ -173,6 +175,8 @@ class ProjectController extends BaseController
             throw PageNotFoundException::forPageNotFound('Project not found');
         }
 
+        $projectTitle = $project['title'];
+
         $projectModel->update($id, [
             'archived_at' => date('Y-m-d H:i:s'),
         ]);
@@ -182,7 +186,7 @@ class ProjectController extends BaseController
             'project',
             $id,
             'archived',
-            'Project archived'
+            'Project archived: ' . $projectTitle
         );
 
         return redirect()
