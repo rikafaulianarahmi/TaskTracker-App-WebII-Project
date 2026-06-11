@@ -1,37 +1,4 @@
-<?php if ($canManage): ?>
-    <p>
-        <a href="/projects/<?= esc($project['id']) ?>/tasks/create">
-            Create New Task
-        </a>
-    </p>
-
-    <form 
-        action="/projects/<?= esc($project['id']) ?>/archive" 
-        method="post"
-        onsubmit="return confirm('Are you sure you want to archive this project?');"
-    >
-        <?= csrf_field() ?>
-
-        <button type="submit">
-            Archive Project
-        </button>
-    </form>
-<?php endif; ?>
-
-<h2>Tasks</h2>
-
-<?php if (empty($tasks)): ?>
-    <p>No tasks yet.</p>
-<?php else: ?>
-    <?php foreach ($tasks as $task): ?>
-        <div>
-            <h3><?= esc($task['title']) ?></h3>
-            <p><?= esc($task['description']) ?></p>
-            <p>Status: <?= esc($task['status']) ?></p>
-            <p>Priority: <?= esc($task['priority']) ?></p>
-            <p>Deadline: <?= esc($task['deadline'] ?? '-') ?></p>
-            <p>Assignee: <?= esc($task['assignee_name'] ?? 'Unassigned') ?></p>
-            <p>Created by: <?= esc($task['creator_name'] ?? '-') ?></p>
+<?= $this->extend('layouts/dashboard') ?>
 
 <?= $this->section('title') ?><?= esc($project['title']) ?><?= $this->endSection() ?>
 
@@ -394,31 +361,39 @@
 
             </div>
         </div>
-        <hr>
-    <?php endforeach; ?>
-<?php endif; ?>
 
-<hr>
+        <!-- Activity Logs Card -->
+        <div class="bg-white border border-slate-100 rounded-3xl p-6 shadow-[0_8px_30px_rgb(0,0,0,0.015)]">
+            <h3 class="text-lg font-bold text-slate-900 mb-1">Activity Logs</h3>
+            <p class="text-xs text-slate-600 mb-5">Recent activity in this project.</p>
 
-<h2>Activity Logs</h2>
+            <?php if (empty($activityLogs)): ?>
+                <p class="text-sm text-slate-500">No activity yet.</p>
+            <?php else: ?>
+                <div class="space-y-4">
+                    <?php foreach ($activityLogs as $log): ?>
+                        <div class="border border-slate-100 rounded-2xl p-3 bg-slate-50/40">
+                            <p class="text-sm text-slate-800">
+                                <span class="font-bold text-slate-900"><?= esc($log['user_name']) ?></span>
+                                <?= esc($log['action']) ?>
+                                <?= esc($log['entity_type']) ?>
 
-<?php if (empty($activityLogs)): ?>
-    <p>No activity yet.</p>
-<?php else: ?>
-    <ul>
-        <?php foreach ($activityLogs as $log): ?>
-            <li>
-                <strong><?= esc($log['user_name']) ?></strong>
-                <?= esc($log['action']) ?>
-                <?= esc($log['entity_type']) ?>
+                                <?php if (! empty($log['detail'])): ?>
+                                    <span class="text-slate-500">- <?= esc($log['detail']) ?></span>
+                                <?php endif; ?>
+                            </p>
 
-                <?php if (! empty($log['detail'])): ?>
-                    - <?= esc($log['detail']) ?>
-                <?php endif; ?>
+                            <p class="text-[10px] text-slate-500 font-semibold mt-1">
+                                <?= esc($log['created_at']) ?>
+                            </p>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
+            <?php endif; ?>
+        </div>
 
-                <br>
-                <small><?= esc($log['created_at']) ?></small>
-            </li>
-        <?php endforeach; ?>
-    </ul>
-<?php endif; ?>
+    </div>
+
+</div>
+
+<?= $this->endSection() ?>
