@@ -76,6 +76,47 @@ class TaskController extends BaseController
             ->with('success', 'Task berhasil dibuat.');
     }
 
+    public function updateStatus($taskId)
+    {
+        $taskModel = new TaskModel();
+
+        $task = $taskModel->find($taskId);
+
+        if (! $task) {
+            return redirect()
+                ->to('/projects')
+                ->with('error', 'Task tidak ditemukan.');
+        }
+
+        $access = $this->getProjectAccess($task['project_id']);
+
+        $isAssignee = (int) $task['assignee_id'] === (int) session()->get('user_id');
+
+        if (! $access['is_admin'] && ! $isAssignee) {
+            return redirect()
+                ->to('/projects/' . $task['project_id'])
+                ->with('error', 'Kamu tidak punya akses untuk mengubah status task ini.');
+        }
+
+        $rules = [
+            'status' => 'required|in_list[todo,in_progress,done]',
+        ];
+
+        if (! $this->validate($rules)) {
+            return redirect()
+                ->to('/projects/' . $task['project_id'])
+                ->with('errors', $this->validator->getErrors());
+        }
+
+        $taskModel->update($taskId, [
+            'status' => $this->request->getPost('status'),
+        ]);
+
+        return redirect()
+            ->to('/projects/' . $task['project_id'])
+            ->with('success', 'Status task berhasil diperbarui.');
+    }
+
     private function getAssignableUsers($projectId, $adminId)
     {
         $db = \Config\Database::connect();

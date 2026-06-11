@@ -23,6 +23,24 @@
             <p>Deadline: <?= esc($task['deadline'] ?? '-') ?></p>
             <p>Assignee: <?= esc($task['assignee_name'] ?? 'Unassigned') ?></p>
             <p>Created by: <?= esc($task['creator_name'] ?? '-') ?></p>
+
+            <?php
+                $canUpdateTask = $canManage || ((int) session()->get('user_id') === (int) $task['assignee_id']);
+            ?>
+
+            <?php if ($canUpdateTask): ?>
+                <form action="/tasks/<?= esc($task['id']) ?>/status" method="post">
+                    <?= csrf_field() ?>
+
+                    <select name="status">
+                        <option value="todo" <?= $task['status'] === 'todo' ? 'selected' : '' ?>>Todo</option>
+                        <option value="in_progress" <?= $task['status'] === 'in_progress' ? 'selected' : '' ?>>In Progress</option>
+                        <option value="done" <?= $task['status'] === 'done' ? 'selected' : '' ?>>Done</option>
+                    </select>
+
+                    <button type="submit">Update Status</button>
+                </form>
+            <?php endif; ?>
         </div>
         <hr>
     <?php endforeach; ?>

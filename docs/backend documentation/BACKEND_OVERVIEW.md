@@ -9,37 +9,35 @@ $routes->post('/login', 'AuthController::attemptLogin');
 $routes->get('/logout', 'AuthController::logout', ['filter' => 'auth']);
 
 $routes->get('/dashboard', 'DashboardController::index', ['filter' => 'auth']);
+$routes->get('/projects', 'ProjectController::index', ['filter' => 'auth']);
 
 $routes->get('/projects/create', 'ProjectController::create', ['filter' => 'auth']);
 $routes->post('/projects/store', 'ProjectController::store', ['filter' => 'auth']);
-$routes->get('/projects', 'ProjectController::index', ['filter' => 'auth']);
-
 $routes->post('/projects/(:num)/archive', 'ProjectController::archive/$1', ['filter' => 'auth']);
 
+$routes->get('/projects/(:num)', 'ProjectController::show/$1', ['filter' => 'auth']);
 $routes->post('/projects/(:num)/members', 'ProjectMemberController::store/$1', ['filter' => 'auth']);
 $routes->post('/projects/(:num)/members/(:num)/remove', 'ProjectMemberController::remove/$1/$2', ['filter' => 'auth']);
 
 $routes->get('/projects/(:num)/tasks/create', 'TaskController::create/$1', ['filter' => 'auth']);
 $routes->post('/projects/(:num)/tasks/store', 'TaskController::store/$1', ['filter' => 'auth']);
-
-$routes->get('/projects/(:num)', 'ProjectController::show/$1', ['filter' => 'auth']);
-
-
+$routes->post('/tasks/(:num)/status', 'TaskController::updateStatus/$1', ['filter' => 'auth']);
 ```
 
-* Route `/` digunakan untuk menampilkan halaman login.
-* Route `/login` digunakan untuk memproses percobaan login.
-* Route `/logout` digunakan untuk keluar dari akun.
-* Route `/dashboard` digunakan untuk menampilkan halaman dashboard.
-* Route `/projects` digunakan untuk menampilkan daftar project.
-* Route `/projects/create` digunakan untuk menampilkan form tambah project.
-* Route `/projects/store` digunakan untuk menyimpan data project baru.
-* Route `/projects/(:num)` digunakan untuk menampilkan detail project berdasarkan ID.
-* Route `/projects/(:num)/tasks/create` digunakan untuk menampilkan form tambah task berdasarkan ID project.
-* Route `/projects/(:num)/tasks/store` digunakan untuk menyimpan data task baru berdasarkan ID project.
-* Route `/projects/(:num)/archive` digunakan untuk mengarsipkan project berdasarkan ID.
-* Route `/projects/(:num)/members` digunakan untuk menambahkan member ke project berdasarkan ID project.
-* Route `/projects/(:num)/members/(:num)/remove` digunakan untuk menghapus member dari project berdasarkan ID project dan ID member.
+* Route GET `/` digunakan untuk menampilkan halaman login.
+* Route POST `/login` digunakan untuk memproses percobaan login.
+* Route GET `/logout` digunakan untuk keluar dari akun.
+* Route GET `/dashboard` digunakan untuk menampilkan halaman dashboard.
+* Route GET `/projects` digunakan untuk menampilkan daftar project.
+* Route GET `/projects/create` digunakan untuk menampilkan form tambah project.
+* Route POST `/projects/store` digunakan untuk menyimpan data project baru.
+* Route GET `/projects/(:num)` digunakan untuk menampilkan detail project berdasarkan ID.
+* Route GET `/projects/(:num)/tasks/create` digunakan untuk menampilkan form tambah task berdasarkan ID project.
+* Route POST `/projects/(:num)/tasks/store` digunakan untuk menyimpan data task baru berdasarkan ID project.
+* Route POST `/tasks/(:num)/status` digunakan untuk memperbarui status task berdasarkan ID task.
+* Route POST `/projects/(:num)/archive` digunakan untuk mengarsipkan project berdasarkan ID.
+* Route POST `/projects/(:num)/members` digunakan untuk menambahkan member ke project berdasarkan ID project.
+* Route POST `/projects/(:num)/members/(:num)/remove` digunakan untuk menghapus member dari project berdasarkan ID project dan ID member.
 
 ## Controller yang sudah dibuat
 
@@ -142,6 +140,11 @@ Fungsi:
 * Mengecek apakah assignee valid untuk project tersebut
 * Menyimpan task baru ke database
 * Mengarahkan kembali ke detail project setelah task berhasil dibuat
+* Mengubah status task melalui form update status.
+* Mengizinkan admin project untuk mengubah status semua task.
+* Mengizinkan assignee untuk mengubah status task miliknya sendiri.
+* Memvalidasi status task agar hanya bernilai `todo`, `in_progress`, atau `done`.
+* Mengarahkan kembali ke halaman detail project setelah status task berhasil diubah.
 
 Method:
 
@@ -150,6 +153,7 @@ create($projectId)
 store($projectId)
 getAssignableUsers($projectId, $adminId)
 isAssignableUser($projectId, $adminId, $userId)
+updateStatus($taskId)
 ```
 
 ### ProjectMemberController

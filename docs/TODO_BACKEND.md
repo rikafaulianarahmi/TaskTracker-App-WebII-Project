@@ -32,6 +32,8 @@
 * [x] Task Store Logic
 * [x] Basic Task Validation
 * [x] Task Assignment
+* [x] Task Status Update
+* [x] Basic Task Status Authorization
 
 #### 🚧 In Progress
 
@@ -42,7 +44,6 @@
 
 ##### Task Module
 
-* [ ] Task Status Update
 * [ ] Deadline Handling
 
 ##### Comment Module
