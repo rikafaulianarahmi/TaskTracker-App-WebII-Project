@@ -191,13 +191,12 @@
                                         <span class="text-xs text-slate-500 font-medium"><?= esc($t['project_title']) ?></span>
                                     </td>
                                     <td class="py-4">
-                                        <span class="text-xs font-semibold <?= strtotime($t['deadline']) <= strtotime(date('Y-m-d')) ? 'text-rose-600' : 'text-slate-500' ?>">
+                                        <span class="text-xs font-semibold <?= $t['deadlineClass'] ?>">
                                             <?= date('d M Y', strtotime($t['deadline'])) ?>
                                         </span>
                                     </td>
                                     <td class="py-4 text-right">
-                                        <span class="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full inline-block
-                                            <?= $t['priority'] === 'high' ? 'bg-rose-50 text-rose-700' : ($t['priority'] === 'medium' ? 'bg-amber-50 text-amber-700' : 'bg-slate-100 text-slate-700') ?>">
+                                        <span class="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full inline-block <?= $t['priorityClass'] ?>">
                                             <?= $t['priority'] ?>
                                         </span>
                                     </td>
@@ -234,12 +233,7 @@
                             <div class="absolute -left-[21px] top-1.5 w-2.5 h-2.5 rounded-full border-2 border-white bg-indigo-600"></div>
                             
                             <span class="text-[10px] font-extrabold text-indigo-600 uppercase tracking-wider block">
-                                <?php 
-                                    $diff = (strtotime($u['deadline']) - strtotime(date('Y-m-d'))) / 86400;
-                                    if ($diff == 0) echo 'Hari Ini';
-                                    elseif ($diff == 1) echo 'Besok';
-                                    else echo floor($diff) . ' hari lagi';
-                                ?>
+                                <?= esc($u['daysLabel']) ?>
                             </span>
                             <h4 class="font-bold text-slate-900 text-sm mt-0.5"><?= esc($u['title']) ?></h4>
                             <p class="text-xs text-slate-500 mt-1"><?= esc($u['project_title']) ?> • <?= date('d M Y', strtotime($u['deadline'])) ?></p>

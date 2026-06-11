@@ -71,10 +71,30 @@ class DashboardController extends BaseController
         }
 
         // My Tasks 
-        $myTasks = $taskModel->getMyTasks($userId);
+        $myTasksRaw = $taskModel->getMyTasks($userId);
+        $myTasks = array_map(function ($task) {
+            $isOverdue = strtotime($task['deadline']) <= strtotime(date('Y-m-d'));
+            $task['deadlineClass'] = $isOverdue ? 'text-rose-600' : 'text-slate-500';
+            $task['priorityClass'] = match($task['priority']) {
+                'high' => 'bg-rose-50 text-rose-700',
+                'medium' => 'bg-amber-50 text-amber-700',
+                default => 'bg-slate-100 text-slate-700'
+            };
+            return $task;
+        }, $myTasksRaw);
 
         // Upcoming Deadlines
         $upcomingDeadlines = $taskModel->getUpcomingDeadlines($activeProjectIds);
+        $upcomingDeadlines = array_map(function ($deadline) {
+            $diff = (strtotime($deadline['deadline']) - strtotime(date('Y-m-d'))) / 86400;
+            $deadline['daysLabel'] = match(true) {
+                $diff == 0 => 'Hari Ini',
+                $diff == 1 => 'Besok',
+                $diff > 1 => "{$diff} hari lagi",
+                default => 'Lewat',
+            };
+            return $deadline;
+        }, $upcomingDeadlines);
 
         // Recent logs
         $recentLogsRaw = $logModel->getRecentActivity($accessibleProjectIds, 4);
