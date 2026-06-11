@@ -4,6 +4,18 @@
             Create New Task
         </a>
     </p>
+
+    <form 
+        action="/projects/<?= esc($project['id']) ?>/archive" 
+        method="post"
+        onsubmit="return confirm('Are you sure you want to archive this project?');"
+    >
+        <?= csrf_field() ?>
+
+        <button type="submit">
+            Archive Project
+        </button>
+    </form>
 <?php endif; ?>
 
 <h2>Tasks</h2>

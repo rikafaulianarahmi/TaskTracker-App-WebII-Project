@@ -66,7 +66,15 @@ class DashboardController extends BaseController
         $upcomingDeadlines = $taskModel->getUpcomingDeadlines($projectIds);
 
         // Recent logs
-        $recentLogs = $logModel->getRecentActivity($projectIds, 4);
+        $recentLogsRaw = $logModel->getRecentActivity($projectIds, 4);
+
+        $recentLogs = array_map(function ($log) {
+            return [
+                ...$log,
+                'message' => $this->formatActivityMessage($log),
+                'formatted_time' => $this->formatDateTime($log['created_at'] ?? null),
+            ];
+        }, $recentLogsRaw);
 
         return view('dashboard/index', [
             'name'              => session()->get('user_name'),
@@ -80,5 +88,58 @@ class DashboardController extends BaseController
             'upcomingDeadlines' => $upcomingDeadlines,
             'recentLogs'        => $recentLogs,
         ]);
+    }
+
+    private function formatDateTime($dateTime)
+    {
+        if (empty($dateTime)) {
+            return '-';
+        }
+
+        $timestamp = strtotime($dateTime);
+
+        if (! $timestamp) {
+            return '-';
+        }
+
+        return date('H:i, d M Y', $timestamp);
+    }
+
+    private function formatActivityMessage(array $log)
+    {
+        $user = $log['user_name'] ?? 'User';
+        $entity = $log['entity_type'] ?? '';
+        $action = $log['action'] ?? '';
+        $detail = $log['detail'] ?? '';
+
+        if ($entity === 'task' && $action === 'created') {
+            return "{$user} membuat task baru. {$detail}";
+        }
+
+        if ($entity === 'task' && ($action === 'status_updated' || $action === 'status_changed')) {
+            return "{$user} mengubah status task. {$detail}";
+        }
+
+        if ($entity === 'comment' && $action === 'created') {
+            return "{$user} menambahkan komentar. {$detail}";
+        }
+
+        if ($entity === 'project' && $action === 'created') {
+            return "{$user} membuat project baru.";
+        }
+
+        if ($entity === 'project' && $action === 'archived') {
+            return "{$user} mengarsipkan project.";
+        }
+
+        if ($entity === 'member' && $action === 'created') {
+            return "{$user} menambahkan member. {$detail}";
+        }
+
+        if ($entity === 'member' && $action === 'deleted') {
+            return "{$user} menghapus member. {$detail}";
+        }
+
+        return "{$user} melakukan aktivitas. {$detail}";
     }
 }

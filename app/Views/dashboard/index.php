@@ -262,31 +262,20 @@
                 <?php if (empty($recentLogs)): ?>
                     <p class="text-sm text-slate-400 py-2">Belum ada aktivitas tercatat.</p>
                 <?php else: ?>
-                    <?php foreach ($recentLogs as $l): ?>
+                    <?php foreach ($recentLogs as $log): ?>
                         <div class="flex gap-3 text-sm">
-                            <!-- User Circle Initial -->
                             <div class="h-8 w-8 bg-indigo-50 text-indigo-700 font-bold rounded-lg flex items-center justify-center text-xs shrink-0 border border-indigo-100">
-                                <?= strtoupper(substr($l['user_name'], 0, 1)) ?>
+                                <?= strtoupper(substr($log['user_name'], 0, 1)) ?>
                             </div>
-                            
+
                             <div>
                                 <p class="text-slate-800 leading-normal">
-                                    <span class="font-semibold text-slate-900"><?= esc($l['user_name']) ?></span> 
-                                    <?php 
-                                        if ($l['action'] === 'created') echo 'membuat ' . esc($l['entity_type']);
-                                        elseif ($l['action'] === 'updated') echo 'memperbarui ' . esc($l['entity_type']);
-                                        elseif ($l['action'] === 'status_changed') echo 'mengubah status ' . esc($l['entity_type']);
-                                        elseif ($l['action'] === 'archived') echo 'mengarsipkan proyek';
-                                        else echo esc($l['action']);
-                                    ?>
-                                    <?php if ($l['detail']): ?>
-                                        <span class="text-slate-500 font-medium">"<?= esc($l['detail']) ?>"</span>
-                                    <?php endif; ?>
-                                    <?php if ($l['project_title']): ?>
-                                        di <span class="font-medium text-indigo-600"><?= esc($l['project_title']) ?></span>
-                                    <?php endif; ?>
+                                    <?= esc($log['message']) ?>
                                 </p>
-                                <span class="text-[10px] text-slate-400 font-medium mt-1 inline-block"><?= date('H:i, d M Y', strtotime($l['created_at'])) ?></span>
+
+                                <span class="text-[10px] text-slate-400 font-medium mt-1 inline-block">
+                                    <?= esc($log['formatted_time']) ?>
+                                </span>
                             </div>
                         </div>
                     <?php endforeach; ?>
