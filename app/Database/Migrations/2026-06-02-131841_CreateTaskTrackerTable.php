@@ -166,6 +166,11 @@ class CreateTaskTrackerTable extends Migration
                 'type' => 'DATETIME',
                 'null' => false,
             ],
+            'archived_at' => [
+                'type'    => 'DATETIME',
+                'null'    => true,
+                'default' => null,
+            ],
         ]);
         $this->forge->addPrimaryKey('id');
         $this->forge->addForeignKey('project_id',   'projects', 'id', 'CASCADE',  'CASCADE');

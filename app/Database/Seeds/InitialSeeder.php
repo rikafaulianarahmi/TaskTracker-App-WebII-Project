@@ -142,6 +142,7 @@ class InitialSeeder extends Seeder
                 'deadline'    => date('Y-m-d', strtotime('-5 days')),
                 'created_at'  => date('Y-m-d H:i:s', strtotime('-14 days')),
                 'updated_at'  => date('Y-m-d H:i:s', strtotime('-6 days')),
+                'archived_at' => null,
             ],
             [
                 'id'          => 2,
@@ -155,6 +156,7 @@ class InitialSeeder extends Seeder
                 'deadline'    => date('Y-m-d', strtotime('+3 days')),
                 'created_at'  => date('Y-m-d H:i:s', strtotime('-7 days')),
                 'updated_at'  => date('Y-m-d H:i:s', strtotime('-1 days')),
+                'archived_at' => null,
             ],
             [
                 'id'          => 3,
@@ -168,6 +170,7 @@ class InitialSeeder extends Seeder
                 'deadline'    => date('Y-m-d', strtotime('+10 days')),
                 'created_at'  => date('Y-m-d H:i:s', strtotime('-3 days')),
                 'updated_at'  => date('Y-m-d H:i:s', strtotime('-3 days')),
+                'archived_at' => null,
             ],
             [
                 'id'          => 4,
@@ -181,6 +184,7 @@ class InitialSeeder extends Seeder
                 'deadline'    => date('Y-m-d', strtotime('+14 days')),
                 'created_at'  => date('Y-m-d H:i:s', strtotime('-2 days')),
                 'updated_at'  => date('Y-m-d H:i:s', strtotime('-2 days')),
+                'archived_at' => null,
             ],
 
             //  Proyek 2: Aplikasi Kasir 
@@ -196,6 +200,7 @@ class InitialSeeder extends Seeder
                 'deadline'    => date('Y-m-d', strtotime('-10 days')),
                 'created_at'  => date('Y-m-d H:i:s', strtotime('-20 days')),
                 'updated_at'  => date('Y-m-d H:i:s', strtotime('-11 days')),
+                'archived_at' => null,
             ],
             [
                 'id'          => 6,
@@ -209,6 +214,7 @@ class InitialSeeder extends Seeder
                 'deadline'    => date('Y-m-d', strtotime('+5 days')),
                 'created_at'  => date('Y-m-d H:i:s', strtotime('-10 days')),
                 'updated_at'  => date('Y-m-d H:i:s', strtotime('-2 days')),
+                'archived_at' => null,
             ],
             [
                 'id'          => 7,
@@ -222,6 +228,7 @@ class InitialSeeder extends Seeder
                 'deadline'    => date('Y-m-d', strtotime('+20 days')),
                 'created_at'  => date('Y-m-d H:i:s', strtotime('-5 days')),
                 'updated_at'  => date('Y-m-d H:i:s', strtotime('-5 days')),
+                'archived_at' => null,
             ],
 
             //  Proyek 3: Migrasi Server (archived, semua done) 
@@ -237,6 +244,7 @@ class InitialSeeder extends Seeder
                 'deadline'    => date('Y-m-d', strtotime('-20 days')),
                 'created_at'  => date('Y-m-d H:i:s', strtotime('-30 days')),
                 'updated_at'  => date('Y-m-d H:i:s', strtotime('-20 days')),
+                'archived_at' => date('Y-m-d H:i:s', strtotime('-10 days')),
             ],
             [
                 'id'          => 9,
@@ -250,6 +258,7 @@ class InitialSeeder extends Seeder
                 'deadline'    => date('Y-m-d', strtotime('-15 days')),
                 'created_at'  => date('Y-m-d H:i:s', strtotime('-28 days')),
                 'updated_at'  => date('Y-m-d H:i:s', strtotime('-15 days')),
+                'archived_at' => date('Y-m-d H:i:s', strtotime('-10 days')),
             ],
         ];
 
