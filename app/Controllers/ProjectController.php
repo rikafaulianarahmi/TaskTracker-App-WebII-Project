@@ -84,6 +84,7 @@ class ProjectController extends BaseController
             ->join('users as assignee', 'assignee.id = tasks.assignee_id', 'left')
             ->join('users as creator', 'creator.id = tasks.created_by', 'left')
             ->where('tasks.project_id', $id)
+            ->where('tasks.archived_at', null)
             ->orderBy('tasks.created_at', 'DESC')
             ->get()
             ->getResultArray();

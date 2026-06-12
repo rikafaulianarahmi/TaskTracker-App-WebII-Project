@@ -44,9 +44,19 @@ class DashboardController extends BaseController
         // Recent Projects 
         $recentProjectsRaw = array_slice($projects, 0, 3);
         $recentProjects = [];
+        
         foreach ($recentProjectsRaw as $p) {
-            $tTasks = $taskModel->where('project_id', $p['id'])->countAllResults();
-            $cTasks = $taskModel->where('project_id', $p['id'])->where('status', 'done')->countAllResults();
+
+            $tTasks = $taskModel
+                ->where('tasks.project_id', $p['id'])
+                ->where('tasks.archived_at', null)
+                ->countAllResults();
+
+            $cTasks = $taskModel
+                ->where('tasks.project_id', $p['id'])
+                ->where('tasks.status', 'done')
+                ->where('tasks.archived_at', null)
+                ->countAllResults();            
             $percent = $tTasks > 0 ? round(($cTasks / $tTasks) * 100) : 0;
             
             if ($percent >= 70) {

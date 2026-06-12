@@ -235,6 +235,43 @@ class TaskController extends BaseController
             ->with('success', 'Task berhasil diperbarui.');
     }
 
+    public function archive($taskId)
+    {
+        $taskModel = new TaskModel();
+
+        $task = $taskModel->find($taskId);
+
+        if (! $task) {
+            return redirect()
+                ->to('/projects')
+                ->with('error', 'Task tidak ditemukan.');
+        }
+
+        $access = $this->getProjectAccess($task['project_id']);
+
+        if (! $access['is_admin']) {
+            return redirect()
+                ->to('/projects/' . $task['project_id'])
+                ->with('error', 'Kamu tidak punya akses untuk mengarsipkan task ini.');
+        }
+
+        $taskModel->update($taskId, [
+            'archived_at' => date('Y-m-d H:i:s'),
+        ]);
+
+        $this->logActivity(
+            $task['project_id'],
+            'task',
+            $taskId,
+            'archived',
+            'Task archived: ' . $task['title']
+        );
+
+        return redirect()
+            ->to('/projects/' . $task['project_id'])
+        ->with('success', 'Task berhasil diarsipkan.');
+    }
+
     private function getAssignableUsers($projectId, $adminId)
     {
         $db = \Config\Database::connect();

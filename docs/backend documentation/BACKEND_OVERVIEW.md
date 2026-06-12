@@ -26,6 +26,7 @@ $routes->post('/projects/(:num)/tasks/store', 'TaskController::store/$1', ['filt
 $routes->post('/tasks/(:num)/status', 'TaskController::updateStatus/$1', ['filter' => 'auth']);
 $routes->get('/tasks/(:num)/edit', 'TaskController::edit/$1', ['filter' => 'auth']);
 $routes->post('/tasks/(:num)/update', 'TaskController::update/$1', ['filter' => 'auth']);
+$routes->post('/tasks/(:num)/archive', 'TaskController::archive/$1', ['filter' => 'auth']);
 
 $routes->post('/tasks/(:num)/comments', 'CommentController::store/$1', ['filter' => 'auth']);
 ```
@@ -48,6 +49,7 @@ $routes->post('/tasks/(:num)/comments', 'CommentController::store/$1', ['filter'
 * Route POST `/tasks/(:num)/status` digunakan untuk memperbarui status task berdasarkan ID task.
 * Route GET `/tasks/(:num)/edit` digunakan untuk menampilkan form edit task berdasarkan ID task.
 * Route POST `/tasks/(:num)/update` digunakan untuk menyimpan perubahan data task berdasarkan ID task.
+* Route POST `/tasks/(:num)/archive` digunakan untuk mengarsipkan task berdasarkan ID task dengan mengisi nilai `archived_at`, sehingga task tidak lagi ditampilkan pada daftar task aktif.
 * Route POST `/tasks/(:num)/comments` digunakan untuk menyimpan komentar baru pada task berdasarkan ID task.
 
 ## Controller yang sudah dibuat
@@ -160,20 +162,14 @@ archive($id)
 
 Fungsi:
 
-* Menampilkan form tambah task berdasarkan ID project
-* Mengecek apakah user memiliki akses sebagai admin project
-* Mengambil daftar user yang dapat dijadikan assignee
-* Memvalidasi input task seperti title, priority, deadline, dan assignee
-* Mengecek apakah assignee valid untuk project tersebut
-* Menyimpan task baru ke database
-* Mengarahkan kembali ke detail project setelah task berhasil dibuat
-* Mengubah status task melalui form update status.
-* Mengizinkan admin project untuk mengubah status semua task.
-* Mengizinkan assignee untuk mengubah status task miliknya sendiri.
-* Memvalidasi status task agar hanya bernilai `todo`, `in_progress`, atau `done`.
-* Mengarahkan kembali ke halaman detail project setelah status task berhasil diubah.
+* Menampilkan form tambah task berdasarkan ID project.
+* Mengecek apakah user memiliki akses sebagai admin project sebelum membuat task.
+* Mengambil daftar user yang dapat dijadikan assignee.
+* Memvalidasi input task seperti title, priority, deadline, dan assignee.
+* Mengecek apakah assignee valid untuk project tersebut.
+* Menyimpan task baru ke database.
+* Mengarahkan kembali ke detail project setelah task berhasil dibuat.
 * Mencatat activity log saat task dibuat.
-* Mencatat activity log saat status task diperbarui.
 * Menampilkan form edit task berdasarkan ID task.
 * Mengecek apakah user memiliki akses sebagai admin project sebelum mengedit task.
 * Mengambil data task yang akan diedit.
@@ -183,6 +179,19 @@ Fungsi:
 * Menyimpan perubahan data task ke database.
 * Mengarahkan kembali ke detail project setelah task berhasil diperbarui.
 * Mencatat activity log saat task diperbarui.
+* Mengarsipkan task berdasarkan ID task.
+* Mengecek apakah task yang akan diarsipkan tersedia di database.
+* Mengecek apakah user memiliki akses sebagai admin project sebelum mengarsipkan task.
+* Mengarsipkan task dengan mengisi nilai `archived_at`.
+* Task yang sudah diarsipkan tidak ditampilkan pada daftar task aktif.
+* Mengarahkan kembali ke detail project setelah task berhasil diarsipkan.
+* Mencatat activity log saat task diarsipkan.
+* Mengubah status task melalui form update status.
+* Mengizinkan admin project untuk mengubah status semua task.
+* Mengizinkan assignee untuk mengubah status task miliknya sendiri.
+* Memvalidasi status task agar hanya bernilai `todo`, `in_progress`, atau `done`.
+* Mengarahkan kembali ke halaman detail project setelah status task berhasil diubah.
+* Mencatat activity log saat status task diperbarui.
 
 Method:
 
@@ -191,6 +200,7 @@ create($projectId)
 store($projectId)
 edit($taskId)
 update($taskId)
+archive($taskId)
 getAssignableUsers($projectId, $adminId)
 isAssignableUser($projectId, $adminId, $userId)
 updateStatus($taskId)
@@ -401,6 +411,8 @@ Project diarsipkan.
 Member ditambahkan ke project.
 Member dihapus dari project.
 Task dibuat.
+Task diedit.
+Task diarsipkan.
 Status task diperbarui.
 Komentar ditambahkan pada task.
 ```
@@ -412,6 +424,7 @@ BaseController menyediakan method logActivity() untuk menyimpan activity log.
 ProjectController mencatat aktivitas saat project dibuat dan diarsipkan.
 TaskController mencatat aktivitas saat task dibuat dan status task diperbarui.
 CommentController mencatat aktivitas saat komentar ditambahkan.
+TaskController mencatat aktivitas saat task dibuat, diperbarui, diarsipkan, dan status task diperbarui.
 ```
 
 Method:
