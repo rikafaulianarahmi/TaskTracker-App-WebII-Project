@@ -17,8 +17,8 @@ class ProjectController extends BaseController
 
         $projects = $db->table('projects')
             ->select('projects.*')
-            ->select('(SELECT COUNT(*) FROM tasks WHERE tasks.project_id = projects.id) as total_tasks')
-            ->select('(SELECT COUNT(*) FROM tasks WHERE tasks.project_id = projects.id AND tasks.status = "done") as completed_tasks')
+            ->select('(SELECT COUNT(*) FROM tasks WHERE tasks.project_id = projects.id AND tasks.archived_at IS NULL) as total_tasks')
+            ->select('(SELECT COUNT(*) FROM tasks WHERE tasks.project_id = projects.id AND tasks.status = "done" AND tasks.archived_at IS NULL) as completed_tasks')
             ->join(
                 'project_members',
                 'project_members.project_id = projects.id AND project_members.user_id = ' . $db->escape($userId),

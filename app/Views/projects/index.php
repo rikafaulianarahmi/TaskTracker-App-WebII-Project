@@ -108,43 +108,61 @@
                 </div>
 
                 <!-- Members  -->
-                <div class="border-t border-slate-50 pt-4 flex items-center justify-between mt-1">
-                    <span class="text-xs font-bold text-slate-700">Project Team</span>
-                    
-                    <div class="flex -space-x-1.5 overflow-hidden">
+                <div class="border-t border-slate-50 pt-4 mt-1">
+                    <div class="flex items-center justify-between mb-3">
+                        <span class="text-xs font-bold text-slate-700">Project Team</span>
+
                         <?php 
                             $members = $membersByProject[$project['id']] ?? [];
-                            $max_avatars = 4;
-                            $count = 0;
+                            $max_members = 4;
                         ?>
-                        <?php foreach ($members as $member): ?>
-                            <?php if ($count < $max_avatars): ?>
+
+                        <?php if (!empty($members)): ?>
+                            <span class="text-[10px] font-bold text-slate-500">
+                                <?= count($members) ?> member<?= count($members) > 1 ? 's' : '' ?>
+                            </span>
+                        <?php endif; ?>
+                    </div>
+
+                    <?php if (empty($members)): ?>
+                        <span class="text-xs text-slate-600 font-semibold italic">No members yet</span>
+                    <?php else: ?>
+                        <div class="space-y-2">
+                            <?php foreach (array_slice($members, 0, $max_members) as $member): ?>
                                 <?php 
                                     $m_name = $member['name'];
                                     $initials = '';
-                                    $words = explode(' ', $m_name);
+                                    $words = explode(' ', trim($m_name));
+
                                     for ($i = 0; $i < min(2, count($words)); $i++) {
                                         $initials .= strtoupper(substr($words[$i], 0, 1));
                                     }
                                 ?>
-                                <div class="inline-block h-6.5 w-6.5 rounded-full bg-slate-100 ring-2 ring-white text-[9px] font-bold text-slate-600 flex items-center justify-center border border-slate-200 select-none cursor-default" 
-                                    title="<?= esc($member['name']) ?> (<?= esc($member['role']) ?>)">
-                                    <?= $initials ?>
+
+                                <div class="flex items-center gap-2 rounded-xl bg-slate-50/70 border border-slate-100 px-2.5 py-2">
+                                    <div class="h-7 w-7 rounded-lg bg-white border border-slate-200 text-slate-700 flex items-center justify-center text-[10px] font-extrabold shrink-0">
+                                        <?= esc($initials) ?>
+                                    </div>
+
+                                    <div class="min-w-0 flex-1">
+                                        <p class="text-xs font-bold text-slate-800 truncate">
+                                            <?= esc($member['name']) ?>
+                                        </p>
+
+                                        <p class="text-[10px] text-slate-500 font-semibold capitalize">
+                                            <?= esc($member['role']) ?>
+                                        </p>
+                                    </div>
                                 </div>
-                                <?php $count++; ?>
-                            <?php else: break; endif; ?>
-                        <?php endforeach; ?>
+                            <?php endforeach; ?>
 
-                        <?php if (count($members) > $max_avatars): ?>
-                            <div class="inline-block h-6.5 w-6.5 rounded-full bg-indigo-50 ring-2 ring-white text-[9px] font-extrabold text-[#4F46E5] flex items-center justify-center border border-indigo-100 select-none cursor-default">
-                                +<?= count($members) - $max_avatars ?>
-                            </div>
-                        <?php endif; ?>
-
-                        <?php if (empty($members)): ?>
-                            <span class="text-xs text-slate-600 font-semibold italic">No members yet</span>
-                        <?php endif; ?>
-                    </div>
+                            <?php if (count($members) > $max_members): ?>
+                                <div class="text-[10px] font-bold text-[#4F46E5] bg-indigo-50 border border-indigo-100 rounded-xl px-2.5 py-2">
+                                    +<?= count($members) - $max_members ?> more member<?= count($members) - $max_members > 1 ? 's' : '' ?>
+                                </div>
+                            <?php endif; ?>
+                        </div>
+                    <?php endif; ?>
                 </div>
             </div>
         <?php endforeach; ?>
