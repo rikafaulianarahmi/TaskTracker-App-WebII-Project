@@ -2,21 +2,23 @@
 
 #### ✅ Completed
 
-* [x] Login Page (Layout dasar, form input email/password)
+* [x] Login Page 
 * [x] Password Visibility Toggle
 * [x] Session Flash Error Feedback
 * [x] Login Page UI Refinement 
 * [x] Sidebar & Navbar Layout 
 * [x] Dashboard Stats 
 * [x] Activity Log 
-* [x] CRUD Proyek (Tampilan daftar proyek dengan grid card premium, visual progress bar, serta detail & form tambah)
-* [x] Kelola Anggota Proyek (Tambah anggota baru & atur role dalam proyek - Khusus Admin)
-* [x] Batasan Role (Member bisa ganti status tugas; Klien hanya bisa melihat saja)
-* [x] Kolom Komentar Tugas 
+* [x] CRUD Proyek 
+* [x] Form New Task & Edit Task
+* [x] Manage Project members 
+* [x] Role Restrictions (Member bisa ganti status tugas; Klien hanya bisa melihat saja)
+* [x] task comment section
+
 
 #### 🚧 In Progress
 
-* [ ] Papan Kanban / Task Board (Poles Kanban Board, kartu tugas, detail modal, dan comment section)
+
 
 #### ❌ Not Started
 

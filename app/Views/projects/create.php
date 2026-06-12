@@ -49,7 +49,7 @@
                 <label for="title" class="block text-[11px] font-extrabold text-slate-600 uppercase tracking-widest">Project Name</label>
                 <div class="relative rounded-xl shadow-sm">
                     <span class="absolute inset-y-0 left-0 flex items-center pl-4 text-slate-500">
-                        <!-- Tag / Document Icon -->
+                        <!-- Document Icon -->
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.2" stroke="currentColor" class="w-4.5 h-4.5">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M9.568 3H5.25A2.25 2.25 0 0 0 3 5.25v13.5A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V9.75m-6-6 6 6m-6-6v6a.75.75 0 0 0 .75.75h6" />
                         </svg>
@@ -67,7 +67,7 @@
                 <span class="text-xs text-slate-600 block pl-1">Minimum 3 characters, maximum 200 characters.</span>
             </div>
 
-            <!-- Project Description -->
+            <!-- Project Desc -->
             <div class="space-y-2">
                 <label for="description" class="block text-[11px] font-extrabold text-slate-600 uppercase tracking-widest">Project Description</label>
                 <textarea 
@@ -80,7 +80,7 @@
                 <span class="text-xs text-slate-600 block pl-1">Maximum 1000 characters. Optional.</span>
             </div>
 
-            <!-- Decorative Illustration Banner -->
+            <!-- Illustration Banner -->
             <div class="relative w-full h-36 rounded-2xl overflow-hidden border border-slate-100 shadow-sm">
                 <img src="<?= base_url('images/workspace_banner.png') ?>" alt="Workspace Banner" class="w-full h-full object-cover">
                 <div class="absolute inset-0 bg-slate-950/20 flex items-center justify-center">
@@ -93,11 +93,14 @@
             <!-- Form Actions -->
             <div class="border-t border-slate-100 pt-6 flex items-center justify-end gap-4">
                 <a href="<?= site_url('projects') ?>" 
-                   class="px-4 py-2 text-slate-500 hover:text-slate-800 text-sm font-bold transition-all duration-200">
+                   class="px-6 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-500 active:bg-rose-700 text-white text-sm font-bold transition-all duration-200 flex items-center gap-1.5 focus:outline-none focus:ring-0">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                    </svg>
                     Cancel
                 </a>
                 <button type="submit" 
-                        class="px-6 py-2.5 rounded-xl bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-50 hover:to-violet-500 active:scale-95 text-white text-sm font-bold transition-all duration-200 shadow-md shadow-indigo-150 flex items-center gap-1.5">
+                        class="px-6 py-2.5 rounded-xl bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 active:scale-95 text-white text-sm font-bold transition-all duration-200 shadow-md shadow-indigo-500/25 flex items-center gap-1.5">
                     New Project
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
