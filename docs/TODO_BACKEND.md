@@ -66,6 +66,7 @@
 * [x] Basic Task Status Authorization
 * [x] Task Edit Feature
 * [x] Task Update Logic
+* [x] Task Archive Handling
 
 ##### Comment Module
 
@@ -97,7 +98,6 @@
 ##### Task Module
 
 * [ ] Full Task CRUD
-* [ ] Task Delete/Archive Handling
 * [ ] Deadline Handling
 
 ##### Comment Module
