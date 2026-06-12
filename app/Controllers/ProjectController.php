@@ -220,4 +220,61 @@ class ProjectController extends BaseController
             ->to('/projects')
             ->with('success', 'Project berhasil diarsipkan.');
     }
+
+    public function edit($id)
+    {
+        $access = $this->getProjectAccess($id);
+
+        if (! $access['is_admin']) {
+            return redirect()
+                ->to('/projects/' . $id)
+                ->with('error', 'Kamu tidak punya akses untuk mengedit project ini.');
+        }
+
+        return view('projects/edit', [
+            'project' => $access['project'],
+        ]);
+    }
+
+    public function update($id)
+    {
+        $access = $this->getProjectAccess($id);
+
+        if (! $access['is_admin']) {
+            return redirect()
+                ->to('/projects/' . $id)
+                ->with('error', 'Kamu tidak punya akses untuk mengedit project ini.');
+        }
+
+        $rules = [
+            'title' => 'required|min_length[3]|max_length[200]',
+            'description' => 'permit_empty|max_length[1000]',
+        ];
+
+        if (! $this->validate($rules)) {
+            return redirect()
+                ->back()
+                ->withInput()
+                ->with('errors', $this->validator->getErrors());
+        }
+
+        $projectModel = new ProjectModel();
+
+        $projectModel->update($id, [
+            'title' => $this->request->getPost('title'),
+            'description' => $this->request->getPost('description'),
+        ]);
+
+        $this->logActivity(
+            $id,
+            'project',
+            $id,
+            'updated',
+            'Project updated: ' . $this->request->getPost('title')
+        );
+
+        return redirect()
+            ->to('/projects/' . $id)
+            ->with('success', 'Project berhasil diperbarui.');
+    }
 }

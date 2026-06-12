@@ -53,14 +53,27 @@
         </div>
 
         <?php if ($canManage): ?>
-            <div class="shrink-0 self-start md:self-auto">
+            <div class="shrink-0 self-start md:self-auto flex items-center gap-2">
+                <a href="<?= site_url('projects/' . esc($project['id']) . '/edit') ?>"
+                class="inline-flex items-center gap-2 border border-indigo-200 hover:bg-indigo-50 text-[#4F46E5] py-2.5 px-4 rounded-xl text-sm font-semibold transition-all duration-200 active:scale-95 shadow-sm">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                        stroke-width="2" stroke="currentColor" class="w-4 h-4">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125" />
+                    </svg>
+                    Edit Project
+                </a>
+
                 <form action="<?= site_url('projects/' . esc($project['id']) . '/archive') ?>" method="post" 
-                      onsubmit="return confirm('Are you sure you want to archive this project? Archived projects will not appear on the dashboard.');">
+                    onsubmit="return confirm('Are you sure you want to archive this project? Archived projects will not appear on the dashboard.');">
                     <?= csrf_field() ?>
+
                     <button type="submit" 
                             class="inline-flex items-center gap-2 border border-rose-250 hover:bg-rose-50 text-rose-700 py-2.5 px-4 rounded-xl text-sm font-semibold transition-all duration-200 active:scale-95 shadow-sm">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="m20.25 7.5-.625 10.632a2.25 2.25 0 0 1-2.247 2.118H6.622a2.25 2.25 0 0 1-2.247-2.118L3.75 7.5m8.25 3v6.75m0 0-3-3m3 3 3-3M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125Z" />
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                            stroke-width="2" stroke="currentColor" class="w-4 h-4">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="m20.25 7.5-.625 10.632a2.25 2.25 0 0 1-2.247 2.118H6.622a2.25 2.25 0 0 1-2.247-2.118L3.75 7.5m8.25 3v6.75m0 0-3-3m3 3 3-3M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125Z" />
                         </svg>
                         Archive Project
                     </button>

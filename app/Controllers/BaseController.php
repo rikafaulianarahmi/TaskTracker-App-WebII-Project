@@ -81,6 +81,10 @@ abstract class BaseController extends Controller
             return "{$user} mengarsipkan project. {$detail}";
         }
 
+        if ($entity === 'project' && $action === 'updated') {
+            return "{$user} memperbarui project. {$detail}";
+        }
+
         if ($entity === 'task' && $action === 'created') {
             return "{$user} membuat task baru. {$detail}";
         }

@@ -38,6 +38,8 @@
 * [x] Project Archive Feature
 * [x] Project Access Restriction
 * [x] Project Role Authorization
+* [x] Project Edit Feature
+* [x] Project Update Logic
 
 ##### Project Member Module
 
@@ -88,8 +90,6 @@
 
 ##### Project Module
 
-* [ ] Project Edit Feature
-* [ ] Project Update Logic
 * [ ] Project Completed/Reopen Status Handling
 
 ##### Task Module
