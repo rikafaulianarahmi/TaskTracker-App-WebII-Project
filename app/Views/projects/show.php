@@ -429,35 +429,44 @@
         </div>
 
         <!-- Activity Logs Card -->
-        <div class="bg-white border border-slate-100 rounded-3xl p-6 shadow-[0_8px_30px_rgb(0,0,0,0.015)]">
-            <h3 class="text-lg font-bold text-slate-900 mb-1">Activity Logs</h3>
-            <p class="text-xs text-slate-600 mb-5">Recent activity in this project.</p>
+        <div class="bg-white rounded-3xl p-6 shadow-[0_8px_30px_rgb(0,0,0,0.015)] border border-slate-100/30">
+            <div class="flex items-center gap-2 mb-6">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                    stroke-width="2.2" stroke="currentColor" class="w-5 h-5 text-indigo-500">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M18 18.72a9.094 9.094 0 0 0 3.741-.479 3 3 0 0 0-4.682-2.72m.94 3.198.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0 1 12 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 0 1 6 18.719m12 0a5.971 5.971 0 0 0-.941-3.197m0 0A5.995 5.995 0 0 0 12 12.75a5.995 5.995 0 0 0-5.058 2.772m0 0a3 3 0 0 0-4.681 2.72 8.986 8.986 0 0 0 3.74.477m.94-3.197a5.971 5.971 0 0 0-.94 3.197M15 6.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm6 3a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Zm-13.5 0a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Z" />
+                </svg>
 
-            <?php if (empty($activityLogs)): ?>
-                <p class="text-sm text-slate-500">No activity yet.</p>
-            <?php else: ?>
-                <div class="space-y-4">
+                <div>
+                    <h3 class="text-lg font-bold text-slate-900">Activity Logs</h3>
+                    <p class="text-xs text-slate-600">Recent activity in this project.</p>
+                </div>
+            </div>
+
+            <div class="space-y-5">
+                <?php if (empty($activityLogs)): ?>
+                    <p class="text-sm text-slate-600 py-2">No activity yet.</p>
+                <?php else: ?>
                     <?php foreach ($activityLogs as $log): ?>
-                        <div class="border border-slate-100 rounded-2xl p-3 bg-slate-50/40">
-                            <p class="text-sm text-slate-800">
-                                <span class="font-bold text-slate-900"><?= esc($log['user_name']) ?></span>
-                                <?= esc($log['action']) ?>
-                                <?= esc($log['entity_type']) ?>
+                        <div class="flex gap-3 text-sm">
+                            <div class="h-8 w-8 bg-indigo-50 text-indigo-700 font-bold rounded-lg flex items-center justify-center text-xs shrink-0 border border-indigo-100">
+                                <?= strtoupper(substr($log['user_name'] ?? 'U', 0, 1)) ?>
+                            </div>
 
-                                <?php if (! empty($log['detail'])): ?>
-                                    <span class="text-slate-500">- <?= esc($log['detail']) ?></span>
-                                <?php endif; ?>
-                            </p>
+                            <div>
+                                <p class="text-slate-800 leading-normal">
+                                    <?= esc($log['message']) ?>
+                                </p>
 
-                            <p class="text-[10px] text-slate-500 font-semibold mt-1">
-                                <?= esc($log['created_at']) ?>
-                            </p>
+                                <span class="text-[10px] text-slate-400 font-medium mt-1 inline-block">
+                                    <?= esc($log['formatted_time']) ?>
+                                </span>
+                            </div>
                         </div>
                     <?php endforeach; ?>
-                </div>
-            <?php endif; ?>
+                <?php endif; ?>
+            </div>
         </div>
-
     </div>
 
 </div>

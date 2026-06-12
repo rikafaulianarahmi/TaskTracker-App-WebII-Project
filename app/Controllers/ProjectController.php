@@ -114,6 +114,8 @@ class ProjectController extends BaseController
             ->get()
             ->getResultArray();
 
+        $activityLogs = $this->formatActivityLogs($activityLogs);
+
         return view('projects/show', [
             'project' => $project,
             'members' => $members,

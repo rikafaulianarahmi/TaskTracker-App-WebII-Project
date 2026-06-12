@@ -50,7 +50,77 @@ abstract class BaseController extends Controller
         }
 
         throw PageNotFoundException::forPageNotFound('Project not found');
-    } 
+    }
+    protected function formatDateTime($dateTime)
+    {
+        if (empty($dateTime)) {
+            return '-';
+        }
+
+        $timestamp = strtotime($dateTime);
+
+        if (! $timestamp) {
+            return '-';
+        }
+
+        return date('H:i, d M Y', $timestamp);
+    }
+
+    protected function formatActivityMessage(array $log)
+    {
+        $user = $log['user_name'] ?? 'User';
+        $entity = $log['entity_type'] ?? '';
+        $action = $log['action'] ?? '';
+        $detail = $log['detail'] ?? '';
+
+        if ($entity === 'project' && $action === 'created') {
+            return "{$user} membuat project baru. {$detail}";
+        }
+
+        if ($entity === 'project' && $action === 'archived') {
+            return "{$user} mengarsipkan project. {$detail}";
+        }
+
+        if ($entity === 'task' && $action === 'created') {
+            return "{$user} membuat task baru. {$detail}";
+        }
+
+        if ($entity === 'task' && ($action === 'status_updated' || $action === 'status_changed')) {
+            return "{$user} mengubah status task. {$detail}";
+        }
+
+        if ($entity === 'comment' && $action === 'created') {
+            return "{$user} menambahkan komentar. {$detail}";
+        }
+
+        if ($entity === 'member' && $action === 'created') {
+            $detail = trim(str_replace('Member added:', '', $detail));
+
+            return $detail
+                ? "{$user} added member: {$detail}"
+                : "{$user} added a member.";
+        }
+
+        if ($entity === 'member' && $action === 'deleted') {
+            $detail = trim(str_replace('Member removed:', '', $detail));
+
+            return $detail
+                ? "{$user} removed member: {$detail}"
+                : "{$user} removed a member.";
+        }
+        return "{$user} melakukan aktivitas. {$detail}";
+    }
+
+    protected function formatActivityLogs(array $logs)
+    {
+        return array_map(function ($log) {
+            return [
+                ...$log,
+                'message' => $this->formatActivityMessage($log),
+                'formatted_time' => $this->formatDateTime($log['created_at'] ?? null),
+            ];
+        }, $logs);
+    }
 
     protected function logActivity($projectId, $entityType, $entityId, $action, $detail = null)
     {
