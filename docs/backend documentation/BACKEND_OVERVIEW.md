@@ -129,6 +129,8 @@ Fungsi:
 * Mengirim data activity log ke view melalui variabel activityLogs.
 * Mencatat activity log saat project dibuat.
 * Mencatat activity log saat project diarsipkan.
+* Mengirim role user dalam project ke view melalui variabel projectRole.
+* Menggunakan projectRole untuk membatasi tampilan form komentar bagi user dengan role klien.
 
 Method:
 
@@ -198,6 +200,8 @@ remove($projectId, $memberId)
 Fungsi:
 
 * Menambahkan komentar pada task berdasarkan ID task.
+* Komentar hanya dapat ditambahkan oleh admin project atau member project.
+* User dengan role klien hanya dapat melihat komentar dan tidak dapat menambahkan komentar.
 * Mengecek apakah task yang akan dikomentari tersedia di database.
 * Menampilkan pesan error jika task tidak ditemukan.
 * Mengecek akses user ke project melalui `getProjectAccess($projectId)`.
@@ -301,7 +305,9 @@ Memvalidasi input project, member, task, status task, dan komentar
 Menampilkan task beserta status, priority, deadline, assignee, dan pembuat task 
 Mengubah status task dengan batasan hanya untuk admin project atau assignee 
 Mencatat activity log saat status task diperbarui 
-Menampilkan dan menambahkan komentar pada setiap task 
+Menampilkan komentar pada setiap task
+Menambahkan komentar hanya untuk admin project dan member project
+Menyembunyikan form komentar untuk user dengan role klien
 Mencatat activity log saat komentar ditambahkan 
 Menampilkan riwayat activity log berdasarkan aktivitas terbaru 
 Menyembunyikan tombol aksi berdasarkan hak akses user Koneksi database melalui model dan query builder

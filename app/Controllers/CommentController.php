@@ -20,6 +20,12 @@ class CommentController extends BaseController
 
         $access = $this->getProjectAccess($task['project_id']);
 
+        if ($access['role'] === 'klien') {
+            return redirect()
+                ->to('/projects/' . $task['project_id'])
+                ->with('error', 'Klien hanya dapat melihat komentar, tidak dapat menambahkan komentar.');
+        }
+
         $rules = [
             'body' => 'required|min_length[1]|max_length[1000]',
         ];

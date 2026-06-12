@@ -214,7 +214,10 @@
 
                                 <!-- Status Update Form (Dropdown) -->
                                 <?php
-                                    $canUpdateTask = $canManage || ((int) session()->get('user_id') === (int) $task['assignee_id']);
+                                    $canUpdateTask = $canManage || (
+                                        $projectRole === 'member' &&
+                                        (int) session()->get('user_id') === (int) $task['assignee_id']
+                                    );
                                 ?>
                                 <?php if ($canUpdateTask): ?>
                                     <form action="<?= site_url('tasks/' . esc($task['id']) . '/status') ?>" method="post" class="flex items-center gap-1.5 shrink-0">
@@ -259,21 +262,28 @@
                                 <?php endif; ?>
 
                                 <!-- Post Comment Form -->
-                                <form action="<?= site_url('tasks/' . esc($task['id']) . '/comments') ?>" method="post" class="flex gap-2">
-                                    <?= csrf_field() ?>
-                                    <input 
-                                        type="text" 
-                                        name="body" 
-                                        placeholder="Write a reply or comment..."
-                                        required
-                                        class="flex-1 bg-white border border-slate-200/60 rounded-xl px-4 py-2.5 text-xs text-slate-800 placeholder-slate-500 focus:outline-none focus:border-indigo-400 focus:ring-1 focus:ring-indigo-400 transition-all shadow-sm"
-                                    >
-                                    <button type="submit" class="bg-[#E0E7FF] hover:bg-[#C7D2FE] text-[#4F46E5] font-bold text-xs py-2.5 px-4 rounded-xl border border-indigo-100 transition-colors shrink-0 flex items-center justify-center">
-                                        Send
-                                    </button>
-                                </form>
-                            </div>
+                                <?php if (($projectRole ?? '') !== 'klien'): ?>
+                                    <form action="<?= site_url('tasks/' . esc($task['id']) . '/comments') ?>" method="post" class="flex gap-2">
+                                        <?= csrf_field() ?>
 
+                                        <input 
+                                            type="text" 
+                                            name="body" 
+                                            placeholder="Write a reply or comment..."
+                                            required
+                                            class="flex-1 bg-white border border-slate-200/60 rounded-xl px-4 py-2.5 text-xs text-slate-800 placeholder-slate-500 focus:outline-none focus:border-indigo-400 focus:ring-1 focus:ring-indigo-400 transition-all shadow-sm"
+                                        >
+
+                                        <button type="submit" class="bg-[#E0E7FF] hover:bg-[#C7D2FE] text-[#4F46E5] font-bold text-xs py-2.5 px-4 rounded-xl border border-indigo-100 transition-colors shrink-0 flex items-center justify-center">
+                                            Send
+                                        </button>
+                                    </form>
+                                <?php else: ?>
+                                    <p class="text-xs text-slate-500 font-semibold italic bg-slate-50 border border-slate-100 rounded-xl px-4 py-3">
+                                        Klien can view comments but cannot add new comments.
+                                    </p>
+                                <?php endif; ?>
+                            </div>
                         </div>
                     <?php endforeach; ?>
                 </div>
@@ -417,6 +427,7 @@
                 <?php endforeach; ?>
             </div>
         </div>
+
         <!-- Activity Logs Card -->
         <div class="bg-white border border-slate-100 rounded-3xl p-6 shadow-[0_8px_30px_rgb(0,0,0,0.015)]">
             <h3 class="text-lg font-bold text-slate-900 mb-1">Activity Logs</h3>

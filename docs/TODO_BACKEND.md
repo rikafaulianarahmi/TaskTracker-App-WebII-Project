@@ -48,6 +48,8 @@
 * [x] Project Member Management Authorization
 * [x] Add Activity Log for Member Added
 * [x] Add Activity Log for Member Removed
+* [x] Define Clear `klien` Permission Rules
+* [x] Enforce `klien` View-Only Access
 
 ##### Task Module
 
@@ -118,8 +120,6 @@
 
 ##### Authorization & Roles
 
-* [ ] Define Clear `klien` Permission Rules
-* [ ] Enforce `klien` View-Only Access
 * [ ] Redirect Logged-in User Away from Login Page
 * [ ] Final Permission Testing
 
