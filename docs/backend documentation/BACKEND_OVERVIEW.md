@@ -3,9 +3,8 @@
 ## Routes yang sudah dibuat
 
 ```php
-$routes->get('/', 'AuthController::login');
-
-$routes->post('/login', 'AuthController::attemptLogin');
+$routes->get('/', 'AuthController::login', ['filter' => 'guest']);
+$routes->post('/login', 'AuthController::attemptLogin', ['filter' => 'guest']);
 $routes->get('/logout', 'AuthController::logout', ['filter' => 'auth']);
 
 $routes->get('/dashboard', 'DashboardController::index', ['filter' => 'auth']);
@@ -268,6 +267,23 @@ Route yang sudah memakai AuthFilter:
 /tasks/{id}/comments
 ```
 
+### GuestFilter
+
+Fungsi:
+
+* Mengecek apakah user sudah login.
+* Jika user sudah login, user diarahkan ke halaman dashboard.
+* Jika user belum login, user boleh mengakses halaman login.
+* Mencegah user yang sudah login membuka halaman login kembali.
+* Digunakan untuk route login dan proses login.
+
+Route yang sudah memakai GuestFilter:
+
+```text
+/
+/login
+```
+
 ## View yang sudah dibuat   
 
 ```text
@@ -311,6 +327,8 @@ Menyembunyikan form komentar untuk user dengan role klien
 Mencatat activity log saat komentar ditambahkan 
 Menampilkan riwayat activity log berdasarkan aktivitas terbaru 
 Menyembunyikan tombol aksi berdasarkan hak akses user Koneksi database melalui model dan query builder
+Mencegah user yang sudah login mengakses halaman login kembali menggunakan GuestFilter.
+User yang sudah login otomatis diarahkan ke dashboard jika membuka halaman login.
 ```
 
 ### Activity Log

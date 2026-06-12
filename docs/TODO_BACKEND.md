@@ -20,6 +20,7 @@
 * [x] Basic Route Protection
 * [x] Authentication Testing
 * [x] Basic Login Validation Messages
+* [x] Redirect Logged-in User Away from Login Page
 
 ##### Dashboard
 
@@ -120,7 +121,6 @@
 
 ##### Authorization & Roles
 
-* [ ] Redirect Logged-in User Away from Login Page
 * [ ] Final Permission Testing
 
 ##### Activity Log Improvements
