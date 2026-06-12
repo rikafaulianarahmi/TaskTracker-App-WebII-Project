@@ -193,16 +193,31 @@
                                     </span>
                                 </div>
                                 
-                                <?php if ($task['deadline']): ?>
-                                    <span class="text-xs text-slate-600 font-semibold flex items-center gap-1">
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.2" stroke="currentColor" class="w-3.5 h-3.5">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75" />
-                                        </svg>
-                                        <?= date('d M Y', strtotime($task['deadline'])) ?>
-                                    </span>
-                                <?php endif; ?>
-                            </div>
+                                <div class="flex items-center gap-2">
+                                    <?php if ($task['deadline']): ?>
+                                        <span class="text-xs text-slate-600 font-semibold flex items-center gap-1">
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.2" stroke="currentColor" class="w-3.5 h-3.5">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75" />
+                                            </svg>
+                                            <?= date('d M Y', strtotime($task['deadline'])) ?>
+                                        </span>
+                                    <?php endif; ?>
 
+                                    <?php if ($canManage): ?>
+                                        <a href="<?= site_url('tasks/' . esc($task['id']) . '/edit') ?>"
+                                        class="inline-flex items-center gap-1.5 border border-indigo-100 bg-white hover:bg-indigo-50 text-[#4F46E5] py-1.5 px-2.5 rounded-lg text-xs font-bold transition-all duration-200 active:scale-95 shadow-sm"
+                                        title="Edit Task">
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                                stroke-width="2.2" stroke="currentColor" class="w-3.5 h-3.5">
+                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                    d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125" />
+                                            </svg>
+                                            Edit
+                                        </a>
+                                    <?php endif; ?>
+                                </div>
+                            </div>
+                            
                             <!-- Task Title & Description -->
                             <div class="mb-4">
                                 <h4 class="text-base font-bold text-slate-900"><?= esc($task['title']) ?></h4>

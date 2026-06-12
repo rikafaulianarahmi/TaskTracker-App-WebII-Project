@@ -113,6 +113,14 @@ abstract class BaseController extends Controller
                 : "{$user} changed task status.";
         }
 
+        if ($entity === 'task' && $action === 'updated') {
+            $detail = trim(str_replace('Task updated:', '', $detail));
+
+            return $detail
+                ? "{$user} updated task: {$detail}"
+                : "{$user} updated a task.";
+        }
+
         if ($entity === 'comment' && ($action === 'created')) {
             $detail = trim(str_replace('Comment created:', '', $detail));
 

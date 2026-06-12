@@ -24,6 +24,8 @@ $routes->post('/projects/(:num)/members/(:num)/remove', 'ProjectMemberController
 $routes->get('/projects/(:num)/tasks/create', 'TaskController::create/$1', ['filter' => 'auth']);
 $routes->post('/projects/(:num)/tasks/store', 'TaskController::store/$1', ['filter' => 'auth']);
 $routes->post('/tasks/(:num)/status', 'TaskController::updateStatus/$1', ['filter' => 'auth']);
+$routes->get('/tasks/(:num)/edit', 'TaskController::edit/$1', ['filter' => 'auth']);
+$routes->post('/tasks/(:num)/update', 'TaskController::update/$1', ['filter' => 'auth']);
 
 $routes->post('/tasks/(:num)/comments', 'CommentController::store/$1', ['filter' => 'auth']);
 ```
@@ -44,6 +46,8 @@ $routes->post('/tasks/(:num)/comments', 'CommentController::store/$1', ['filter'
 * Route GET `/projects/(:num)/tasks/create` digunakan untuk menampilkan form tambah task berdasarkan ID project.
 * Route POST `/projects/(:num)/tasks/store` digunakan untuk menyimpan data task baru berdasarkan ID project.
 * Route POST `/tasks/(:num)/status` digunakan untuk memperbarui status task berdasarkan ID task.
+* Route GET `/tasks/(:num)/edit` digunakan untuk menampilkan form edit task berdasarkan ID task.
+* Route POST `/tasks/(:num)/update` digunakan untuk menyimpan perubahan data task berdasarkan ID task.
 * Route POST `/tasks/(:num)/comments` digunakan untuk menyimpan komentar baru pada task berdasarkan ID task.
 
 ## Controller yang sudah dibuat
@@ -135,6 +139,10 @@ Fungsi:
 * Mencatat activity log saat project diarsipkan.
 * Mengirim role user dalam project ke view melalui variabel projectRole.
 * Menggunakan projectRole untuk membatasi tampilan form komentar bagi user dengan role klien.
+* Menampilkan form edit project berdasarkan ID project.
+* Menyimpan perubahan data project hanya jika user adalah admin project.
+* Melakukan validasi input saat mengedit project.
+* Mencatat activity log saat project diperbarui.
 
 Method:
 
@@ -143,6 +151,8 @@ index()
 show($id)
 create()
 store()
+edit($id)
+update($id)
 archive($id)
 ```
 
@@ -164,12 +174,23 @@ Fungsi:
 * Mengarahkan kembali ke halaman detail project setelah status task berhasil diubah.
 * Mencatat activity log saat task dibuat.
 * Mencatat activity log saat status task diperbarui.
+* Menampilkan form edit task berdasarkan ID task.
+* Mengecek apakah user memiliki akses sebagai admin project sebelum mengedit task.
+* Mengambil data task yang akan diedit.
+* Mengambil daftar user yang dapat dijadikan assignee saat mengedit task.
+* Memvalidasi input update task seperti title, priority, deadline, dan assignee.
+* Mengecek apakah assignee yang dipilih valid untuk project tersebut.
+* Menyimpan perubahan data task ke database.
+* Mengarahkan kembali ke detail project setelah task berhasil diperbarui.
+* Mencatat activity log saat task diperbarui.
 
 Method:
 
 ```text
 create($projectId)
 store($projectId)
+edit($taskId)
+update($taskId)
 getAssignableUsers($projectId, $adminId)
 isAssignableUser($projectId, $adminId, $userId)
 updateStatus($taskId)
@@ -273,6 +294,8 @@ Route yang sudah memakai AuthFilter:
 /projects/{id}/tasks/create
 /projects/{id}/tasks/store
 /tasks/{id}/status
+/tasks/(:num)/edit
+/tasks/(:num)/update
 /tasks/{id}/comments
 ```
 
@@ -303,6 +326,7 @@ projects/show.php
 projects/create.php
 projects/edit.php
 tasks/create.php
+tasks/edit.php
 ```
 
 Fungsi view:
@@ -314,6 +338,7 @@ Fungsi view:
 * projects/create.php digunakan untuk menampilkan form pembuatan project baru.
 * projects/edit.php digunakan untuk menampilkan form edit project yang sudah ada.
 * tasks/create.php digunakan untuk menampilkan form pembuatan task baru pada project tertentu.
+* tasks/edit.php digunakan untuk menampilkan form edit task yang sudah ada, seperti title, description, priority, deadline, dan assignee pada project tertentu.
 
 ## Fitur yang sudah berjalan
 
@@ -340,6 +365,9 @@ Menampilkan riwayat activity log berdasarkan aktivitas terbaru
 Menyembunyikan tombol aksi berdasarkan hak akses user Koneksi database melalui model dan query builder
 Mencegah user yang sudah login mengakses halaman login kembali menggunakan GuestFilter.
 User yang sudah login otomatis diarahkan ke dashboard jika membuka halaman login.
+Membuat dan mengedit task berdasarkan project dengan batasan hanya untuk admin project
+Mencatat activity log saat task dibuat dan diperbarui
+Menampilkan tombol edit task hanya untuk admin project
 ```
 
 ### Activity Log

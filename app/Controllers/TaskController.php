@@ -136,6 +136,105 @@ class TaskController extends BaseController
             ->with('success', 'Status task berhasil diperbarui.');
     }
 
+    public function edit($taskId)
+    {
+        $taskModel = new TaskModel();
+
+        $task = $taskModel->find($taskId);
+
+        if (! $task) {
+            return redirect()
+                ->to('/projects')
+                ->with('error', 'Task tidak ditemukan.');
+        }
+
+        $access = $this->getProjectAccess($task['project_id']);
+
+        if (! $access['is_admin']) {
+            return redirect()
+                ->to('/projects/' . $task['project_id'])
+                ->with('error', 'Kamu tidak punya akses untuk mengedit task ini.');
+        }
+
+        $assignees = $this->getAssignableUsers(
+            $task['project_id'],
+            $access['project']['admin_id']
+        );
+
+        return view('tasks/edit', [
+            'project' => $access['project'],
+            'task' => $task,
+            'assignees' => $assignees,
+        ]);
+    }
+
+    public function update($taskId)
+    {
+        $taskModel = new TaskModel();
+
+        $task = $taskModel->find($taskId);
+
+        if (! $task) {
+            return redirect()
+                ->to('/projects')
+                ->with('error', 'Task tidak ditemukan.');
+        }
+
+        $access = $this->getProjectAccess($task['project_id']);
+
+        if (! $access['is_admin']) {
+            return redirect()
+                ->to('/projects/' . $task['project_id'])
+                ->with('error', 'Kamu tidak punya akses untuk mengedit task ini.');
+        }
+
+        $rules = [
+            'title' => 'required|min_length[3]|max_length[200]',
+            'description' => 'permit_empty|max_length[1000]',
+            'assignee_id' => 'permit_empty|integer',
+            'priority' => 'required|in_list[low,medium,high]',
+            'deadline' => 'permit_empty|valid_date[Y-m-d]',
+        ];
+
+        if (! $this->validate($rules)) {
+            return redirect()
+                ->back()
+                ->withInput()
+                ->with('errors', $this->validator->getErrors());
+        }
+
+        $assigneeId = $this->request->getPost('assignee_id');
+
+        if ($assigneeId && ! $this->isAssignableUser($task['project_id'], $access['project']['admin_id'], $assigneeId)) {
+            return redirect()
+                ->back()
+                ->withInput()
+                ->with('error', 'Assignee tidak valid untuk project ini.');
+        }
+
+        $title = $this->request->getPost('title');
+
+        $taskModel->update($taskId, [
+            'title' => $title,
+            'description' => $this->request->getPost('description'),
+            'assignee_id' => $assigneeId ?: null,
+            'priority' => $this->request->getPost('priority'),
+            'deadline' => $this->request->getPost('deadline') ?: null,
+        ]);
+
+        $this->logActivity(
+            $task['project_id'],
+            'task',
+            $taskId,
+            'updated',
+            'Task updated: ' . $title
+        );
+
+        return redirect()
+            ->to('/projects/' . $task['project_id'])
+            ->with('success', 'Task berhasil diperbarui.');
+    }
+
     private function getAssignableUsers($projectId, $adminId)
     {
         $db = \Config\Database::connect();

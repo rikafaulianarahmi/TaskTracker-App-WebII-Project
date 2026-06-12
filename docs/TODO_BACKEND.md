@@ -64,6 +64,8 @@
 * [x] Display Tasks in Project Detail
 * [x] Task Status Update
 * [x] Basic Task Status Authorization
+* [x] Task Edit Feature
+* [x] Task Update Logic
 
 ##### Comment Module
 
@@ -95,8 +97,6 @@
 ##### Task Module
 
 * [ ] Full Task CRUD
-* [ ] Task Edit Feature
-* [ ] Task Update Logic
 * [ ] Task Delete/Archive Handling
 * [ ] Deadline Handling
 

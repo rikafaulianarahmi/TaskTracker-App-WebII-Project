@@ -24,5 +24,7 @@ $routes->post('/projects/(:num)/members/(:num)/remove', 'ProjectMemberController
 $routes->get('/projects/(:num)/tasks/create', 'TaskController::create/$1', ['filter' => 'auth']);
 $routes->post('/projects/(:num)/tasks/store', 'TaskController::store/$1', ['filter' => 'auth']);
 $routes->post('/tasks/(:num)/status', 'TaskController::updateStatus/$1', ['filter' => 'auth']);
+$routes->get('/tasks/(:num)/edit', 'TaskController::edit/$1', ['filter' => 'auth']);
+$routes->post('/tasks/(:num)/update', 'TaskController::update/$1', ['filter' => 'auth']);
 
 $routes->post('/tasks/(:num)/comments', 'CommentController::store/$1', ['filter' => 'auth']);
