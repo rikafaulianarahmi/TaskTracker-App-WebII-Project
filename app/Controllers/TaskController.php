@@ -99,8 +99,9 @@ class TaskController extends BaseController
         $access = $this->getProjectAccess($task['project_id']);
 
         $isAssignee = (int) $task['assignee_id'] === (int) session()->get('user_id');
+        $isAssignedMember = $access['role'] === 'member' && $isAssignee;
 
-        if (! $access['is_admin'] && ! $isAssignee) {
+        if (! $access['is_admin'] && ! $isAssignedMember) {
             return redirect()
                 ->to('/projects/' . $task['project_id'])
                 ->with('error', 'Kamu tidak punya akses untuk mengubah status task ini.');

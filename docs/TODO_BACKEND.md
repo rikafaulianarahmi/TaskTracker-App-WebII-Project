@@ -20,6 +20,7 @@
 * [x] Basic Route Protection
 * [x] Authentication Testing
 * [x] Basic Login Validation Messages
+* [x] Redirect Logged-in User Away from Login Page
 
 ##### Dashboard
 
@@ -37,6 +38,8 @@
 * [x] Project Archive Feature
 * [x] Project Access Restriction
 * [x] Project Role Authorization
+* [x] Project Edit Feature
+* [x] Project Update Logic
 
 ##### Project Member Module
 
@@ -46,6 +49,10 @@
 * [x] Prevent Duplicate Project Members
 * [x] Remove Member from Project
 * [x] Project Member Management Authorization
+* [x] Add Activity Log for Member Added
+* [x] Add Activity Log for Member Removed
+* [x] Define Clear `klien` Permission Rules
+* [x] Enforce `klien` View-Only Access
 
 ##### Task Module
 
@@ -73,14 +80,16 @@
 * [x] Activity Log for Task Actions
 * [x] Activity Log for Comment Actions
 
+##### Validation & Security
+
+* [x]  Remove Temporary Test Routes and Test Controllers
+
 ---
 
 #### 🚧 In Progress / Partial
 
 ##### Project Module
 
-* [ ] Project Edit Feature
-* [ ] Project Update Logic
 * [ ] Project Completed/Reopen Status Handling
 
 ##### Task Module
@@ -116,15 +125,10 @@
 
 ##### Authorization & Roles
 
-* [ ] Define Clear `klien` Permission Rules
-* [ ] Enforce `klien` View-Only Access
-* [ ] Redirect Logged-in User Away from Login Page
 * [ ] Final Permission Testing
 
 ##### Activity Log Improvements
 
-* [ ] Add Activity Log for Member Added
-* [ ] Add Activity Log for Member Removed
 * [ ] Standardize Activity Log Action Names
 * [ ] Limit Recent Activity Logs Displayed
 
@@ -135,7 +139,6 @@
 * [ ] Authorization Checks Review
 * [ ] Session Regeneration After Login
 * [ ] Login Attempt Limit / Brute-force Protection
-* [ ] Remove Temporary Test Routes and Test Controllers
 
 ##### Testing
 

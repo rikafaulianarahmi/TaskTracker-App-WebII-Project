@@ -128,7 +128,7 @@
                                     }
                                 ?>
                                 <div class="inline-block h-6.5 w-6.5 rounded-full bg-slate-100 ring-2 ring-white text-[9px] font-bold text-slate-600 flex items-center justify-center border border-slate-200 select-none cursor-default" 
-                                     title="<?= esc($member['name']) ?> (<?= esc($member['role']) ?>)">
+                                    title="<?= esc($member['name']) ?> (<?= esc($member['role']) ?>)">
                                     <?= $initials ?>
                                 </div>
                                 <?php $count++; ?>
