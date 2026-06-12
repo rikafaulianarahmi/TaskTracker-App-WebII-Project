@@ -78,6 +78,9 @@
 * [x] Activity Log for Task Actions
 * [x] Activity Log for Comment Actions
 
+##### Validation & Security
+* [x]  Remove Temporary Test Routes and Test Controllers
+
 ---
 
 #### 🚧 In Progress / Partial
@@ -135,7 +138,6 @@
 * [ ] Authorization Checks Review
 * [ ] Session Regeneration After Login
 * [ ] Login Attempt Limit / Brute-force Protection
-* [ ] Remove Temporary Test Routes and Test Controllers
 
 ##### Testing
 
