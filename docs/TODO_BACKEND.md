@@ -46,6 +46,8 @@
 * [x] Prevent Duplicate Project Members
 * [x] Remove Member from Project
 * [x] Project Member Management Authorization
+* [x] Add Activity Log for Member Added
+* [x] Add Activity Log for Member Removed
 
 ##### Task Module
 
@@ -123,8 +125,6 @@
 
 ##### Activity Log Improvements
 
-* [ ] Add Activity Log for Member Added
-* [ ] Add Activity Log for Member Removed
 * [ ] Standardize Activity Log Action Names
 * [ ] Limit Recent Activity Logs Displayed
 

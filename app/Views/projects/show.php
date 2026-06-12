@@ -121,7 +121,7 @@
                 
                 <?php if ($canManage): ?>
                     <a href="<?= site_url('projects/' . esc($project['id']) . '/tasks/create') ?>" 
-                       class="inline-flex items-center gap-1.5 bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 active:scale-95 text-white py-2 px-3.5 rounded-lg text-xs font-bold transition-all duration-200 shadow-sm shadow-indigo-100/80">
+                        class="inline-flex items-center gap-1.5 bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 active:scale-95 text-white py-2 px-3.5 rounded-lg text-xs font-bold transition-all duration-200 shadow-sm shadow-indigo-100/80">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-3.5 h-3.5">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
                         </svg>
@@ -287,12 +287,63 @@
         
         <!-- Members List Card -->
         <div class="bg-white border border-slate-100 rounded-3xl p-6 shadow-[0_8px_30px_rgb(0,0,0,0.015)]">
-            <h3 class="text-lg font-bold text-slate-900 mb-1">Team Members</h3>
-            <p class="text-xs text-slate-600 mb-5">List of users participating in this project.</p>
+            <div class="flex items-start justify-between gap-3 mb-5">
+                <div>
+                    <h3 class="text-lg font-bold text-slate-900 mb-1">Team Members</h3>
+                    <p class="text-xs text-slate-600">List of users participating in this project.</p>
+                </div>
+
+                <?php if ($canManage): ?>
+                    <button type="button"
+                            onclick="document.getElementById('add-member-form').classList.toggle('hidden')"
+                            class="inline-flex items-center gap-1.5 bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 active:scale-95 text-white py-2 px-3.5 rounded-lg text-xs font-bold transition-all duration-200 shadow-sm shadow-indigo-100/80">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                            stroke-width="2.5" stroke="currentColor" class="w-3.5 h-3.5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                        </svg>
+                        Add
+                    </button>
+                <?php endif; ?>
+            </div>
+
+            <?php if ($canManage): ?>
+                <form id="add-member-form"
+                    action="<?= site_url('projects/' . esc($project['id']) . '/members') ?>"
+                    method="post"
+                    class="hidden mb-5 rounded-2xl border border-slate-100 bg-slate-50/60 p-3.5">
+                    <?= csrf_field() ?>
+
+                    <div class="space-y-2">
+                        <select name="user_id"
+                                required
+                                class="w-full bg-white border border-slate-200 rounded-xl py-2.5 px-3 text-xs font-semibold text-slate-700 focus:outline-none focus:border-indigo-400 focus:ring-1 focus:ring-indigo-400">
+                            <option value="">Select user</option>
+
+                            <?php foreach (($availableUsers ?? $users ?? []) as $user): ?>
+                                <option value="<?= esc($user['id']) ?>">
+                                    <?= esc($user['name']) ?><?= !empty($user['email']) ? ' - ' . esc($user['email']) : '' ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
+
+                        <div class="flex gap-2">
+                            <select name="role"
+                                    required
+                                    class="flex-1 bg-white border border-slate-200 rounded-xl py-2.5 px-3 text-xs font-semibold text-slate-700 focus:outline-none focus:border-indigo-400 focus:ring-1 focus:ring-indigo-400">
+                                <option value="member">Member</option>
+                                <option value="klien">Klien</option>
+                            </select>
+
+                            <button type="submit"
+                                    class="shrink-0 bg-[#4F46E5] hover:bg-[#4338CA] text-white text-xs font-bold py-2.5 px-4 rounded-xl transition-colors active:scale-95">
+                                Save
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            <?php endif; ?>
 
             <div class="space-y-3.5">
-                
-                <!-- Project Owner / PM (Admin) -->
                 <div class="flex items-center justify-between p-3.5 rounded-2xl border border-indigo-100 bg-[#EEF2FF]/40">
                     <div class="flex items-center gap-3">
                         <?php 
@@ -303,7 +354,7 @@
                             }
                         ?>
                         <div class="h-9 w-9 bg-[#4F46E5] text-white rounded-xl flex items-center justify-center font-bold text-xs select-none shadow-sm">
-                            <?= $initials ?>
+                            <?= esc($initials) ?>
                         </div>
                         <div>
                             <span class="text-xs font-bold text-slate-900 block leading-tight"><?= esc($adminName) ?></span>
@@ -313,10 +364,13 @@
                     <span class="bg-indigo-50 text-[#4F46E5] text-[9px] font-extrabold uppercase px-2 py-0.5 rounded-full border border-indigo-100 tracking-wider">Owner</span>
                 </div>
 
-                <!-- Pivot Members -->
                 <?php foreach ($members as $member): ?>
-                    <div class="flex items-center justify-between p-3.5 rounded-2xl border border-slate-155 hover:bg-[#F5F8FF]/30 transition-all duration-200 group">
-                        <div class="flex items-center gap-3">
+                    <?php
+                        $projectMemberId = $member['id'];
+                    ?>
+
+                    <div class="flex items-center justify-between gap-3 p-3.5 rounded-2xl border border-slate-155 hover:bg-[#F5F8FF]/30 transition-all duration-200">
+                        <div class="flex items-center gap-3 min-w-0">
                             <?php 
                                 $initials = '';
                                 $words = explode(' ', $member['name']);
@@ -324,17 +378,16 @@
                                     $initials .= strtoupper(substr($words[$i], 0, 1));
                                 }
                             ?>
-                            <div class="h-9 w-9 bg-slate-100 text-slate-700 border border-slate-200 rounded-xl flex items-center justify-center font-bold text-xs select-none">
-                                <?= $initials ?>
+                            <div class="h-9 w-9 bg-slate-100 text-slate-700 border border-slate-200 rounded-xl flex items-center justify-center font-bold text-xs select-none shrink-0">
+                                <?= esc($initials) ?>
                             </div>
-                            <div>
-                                <span class="text-xs font-bold text-slate-800 block leading-tight"><?= esc($member['name']) ?></span>
-                                <span class="text-[10px] text-slate-700 block mt-0.5"><?= esc($member['email']) ?></span>
+                            <div class="min-w-0">
+                                <span class="text-xs font-bold text-slate-800 block leading-tight truncate"><?= esc($member['name']) ?></span>
+                                <span class="text-[10px] text-slate-700 block mt-0.5 truncate"><?= esc($member['email']) ?></span>
                             </div>
                         </div>
                         
-                        <div class="flex items-center gap-2">
-                            <!-- Role badge -->
+                        <div class="flex items-center gap-2 shrink-0">
                             <span class="text-[9px] font-extrabold uppercase px-2 py-0.5 rounded-full tracking-wider border 
                                 <?= $member['role'] === 'member' 
                                     ? 'bg-blue-50 text-blue-700 border-blue-150' 
@@ -342,15 +395,19 @@
                                 <?= esc($member['role']) ?>
                             </span>
 
-                            <!-- Remove member (Admin only) -->
                             <?php if ($canManage): ?>
-                                <form action="<?= site_url('projects/' . esc($project['id']) . '/members/' . esc($member['user_id']) . '/remove') ?>" method="post" 
-                                      onsubmit="return confirm('Remove <?= esc($member['name']) ?> from project?');"
-                                      class="opacity-0 group-hover:opacity-100 transition-opacity">
+                                <form action="<?= site_url('projects/' . esc($project['id']) . '/members/' . esc($projectMemberId) . '/remove') ?>"
+                                    method="post"
+                                    onsubmit="return confirm('Remove <?= esc($member['name'], 'js') ?> from project?');">
                                     <?= csrf_field() ?>
-                                    <button type="submit" class="text-rose-500 hover:text-rose-700 p-1.5 hover:bg-rose-50 rounded-lg transition-colors" title="Remove Member">
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.2" stroke="currentColor" class="w-4 h-4">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M22 10.5h-6m-2.25-4.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0ZM4 19.25a7.25 7.25 0 0 1 14.5 0" />
+
+                                    <button type="submit"
+                                            class="inline-flex items-center justify-center text-rose-500 hover:text-rose-700 p-1.5 hover:bg-rose-50 rounded-lg transition-colors"
+                                            title="Remove Member">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                            stroke-width="2.2" stroke="currentColor" class="w-4 h-4">
+                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                d="M22 10.5h-6m-2.25-4.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0ZM4 19.25a7.25 7.25 0 0 1 14.5 0" />
                                         </svg>
                                     </button>
                                 </form>
@@ -358,10 +415,8 @@
                         </div>
                     </div>
                 <?php endforeach; ?>
-
             </div>
         </div>
-
         <!-- Activity Logs Card -->
         <div class="bg-white border border-slate-100 rounded-3xl p-6 shadow-[0_8px_30px_rgb(0,0,0,0.015)]">
             <h3 class="text-lg font-bold text-slate-900 mb-1">Activity Logs</h3>

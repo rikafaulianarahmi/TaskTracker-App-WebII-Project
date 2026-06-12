@@ -174,13 +174,15 @@ updateStatus($taskId)
 Fungsi:
 
 * Menambahkan user sebagai member project.
+* Menghapus member dari project.
+* Mencatat activity log saat member ditambahkan.
+* Mencatat activity log saat member dihapus.
 * Memastikan hanya admin project yang dapat mengelola member.
 * Melakukan validasi input `user_id` dan `role`.
 * Mengecek akses project melalui `getProjectAccess($projectId)`.
 * Mencegah user yang sama ditambahkan dua kali ke project yang sama.
 * Menyimpan role member sebagai `member` atau `klien`.
 * Menyimpan waktu bergabung member melalui `joined_at`.
-* Menghapus member dari project.
 * Memastikan member yang akan dihapus benar-benar berada pada project tersebut.
 * Menampilkan pesan error jika user tidak memiliki akses atau member tidak ditemukan.
 
@@ -321,7 +323,7 @@ Fungsi:
 ```text
 user_id yaitu ID user yang melakukan aktivitas.
 project_id yaitu ID project tempat aktivitas terjadi.
-entity_type yaitu jenis data yang terkena aktivitas, seperti project, task, atau comment.
+entity_type yaitu jenis data yang terkena aktivitas, seperti project, member, task, atau comment.
 entity_id yaitu ID dari data yang terkena aktivitas.
 action yaitu aksi yang dilakukan, seperti created, archived, atau status_updated.
 detail yaitu keterangan tambahan dari aktivitas.
@@ -333,6 +335,8 @@ created_at yaitu waktu aktivitas dilakukan.
 ```text
 Project dibuat.
 Project diarsipkan.
+Member ditambahkan ke project.
+Member dihapus dari project.
 Task dibuat.
 Status task diperbarui.
 Komentar ditambahkan pada task.

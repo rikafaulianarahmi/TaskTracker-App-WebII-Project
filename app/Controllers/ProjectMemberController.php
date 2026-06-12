@@ -41,12 +41,26 @@ class ProjectMemberController extends BaseController
                 ->with('error', 'User sudah menjadi member project ini.');
         }
 
-        $memberModel->insert([
+        $userId = $this->request->getPost('user_id');
+        $role = $this->request->getPost('role');
+
+        $memberId = $memberModel->insert([
             'project_id' => $projectId,
-            'user_id' => $this->request->getPost('user_id'),
-            'role' => $this->request->getPost('role'),
+            'user_id' => $userId,
+            'role' => $role,
             'joined_at' => date('Y-m-d H:i:s'),
         ]);
+
+        $userModel = new \App\Models\UserModel();
+        $addedUser = $userModel->find($userId);
+
+        $this->logActivity(
+            $projectId,
+            'member',
+            $memberId,
+            'created',
+            'Member added: ' . ($addedUser['name'] ?? 'Unknown User') . ' as ' . $role
+        );
 
         return redirect()
             ->to('/projects/' . $projectId)
@@ -76,7 +90,18 @@ class ProjectMemberController extends BaseController
                 ->with('error', 'Member tidak ditemukan.');
         }
 
+        $userModel = new \App\Models\UserModel();
+        $removedUser = $userModel->find($member['user_id']);
+
         $memberModel->delete($memberId);
+
+        $this->logActivity(
+            $projectId,
+            'member',
+            $memberId,
+            'deleted',
+            'Member removed: ' . ($removedUser['name'] ?? 'Unknown User')
+        );
 
         return redirect()
             ->to('/projects/' . $projectId)
